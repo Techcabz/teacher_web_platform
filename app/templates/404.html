@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="text-center max-w-lg mx-auto mt-6">
+    <h1 class="text-9xl font-extrabold text-gray-400">404</h1>
+    <p class="text-lg font-medium text-gray-600 mt-4">Oops! The page you're looking for doesn't exist.</p>
+    <p class="mt-6">
+        <a href="{{ url_for('main.home') }}" class="text-blue-500 hover:underline">Return to Home</a>
+    </p>
+</div>
+{% endblock %}

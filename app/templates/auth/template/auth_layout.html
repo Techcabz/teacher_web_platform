@@ -1,0 +1,22 @@
+{% extends "base.html" %} {% block content %}
+<div class="bg-gray-900 text-white font-roboto h-screen">
+  <div class="relative w-full h-full">
+    <!-- Background Image -->
+    <div
+      class="absolute inset-0 bg-no-repeat bg-cover bg-center"
+      style="background-image: url('{{ url_for('static', filename='images/background.webp') }}');"
+    ></div>
+
+    <div class="relative w-full">
+      <!-- Header -->
+      <div class="absolute top-0 left-0 w-full bg-black bg-opacity-70">
+        <div class="px-4 py-2 text-center text-sm md:text-base">
+          A Seamless Teachers Web Platform for Adhoc Comprehensive Data Access
+          in Magallanes Central Elementary School
+        </div>
+      </div>
+    </div>
+  </div>
+  {% block wrapper_content %} {% endblock %}
+</div>
+{% endblock %}
