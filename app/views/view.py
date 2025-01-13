@@ -13,21 +13,14 @@ admin = Blueprint('admin', __name__, url_prefix='/admin')
 def login():
     if current_user.is_authenticated and request.endpoint != 'admin.dashboard':
         return redirect(url_for('admin.dashboard'))
-
-    result = login_user_controller(request)
-    if result:
-        return result
-    return render_template('auth/login.html')
+    return login_user_controller(request)
 
 @main.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated and request.endpoint != 'admin.dashboard':
         return redirect(url_for('admin.dashboard'))
 
-    result = register_user_controller(request)
-    if result:
-        return result
-    return render_template('auth/register.html')
+    return register_user_controller(request)
 
 @main.route('/', methods=['GET', 'POST'])
 def home():
@@ -49,3 +42,4 @@ def logout():
 @web_guard
 def dashboard():
     return render_template('admin/dashboard.html')
+

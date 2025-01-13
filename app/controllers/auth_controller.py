@@ -1,11 +1,16 @@
-from flask import flash, redirect, url_for, request
+from flask import flash, redirect, url_for, request,render_template
 from flask_login import login_user,logout_user
 from flask import session
 from app.services.user_services import UserService
 from ..extensions import db
+from flask import jsonify
+
 
 def login_user_controller(request):
-    if request.method == 'POST':
+    if request.method == 'GET':
+        return render_template('auth/login.html')
+
+    elif request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         user = UserService.get_user_by_username(username)
@@ -13,39 +18,40 @@ def login_user_controller(request):
         if user and user.check_password(password):
             login_user(user)
             session['role'] = user.role
-            flash('Login successful!', 'success')
-            return redirect(url_for('admin.dashboard')) 
-        else:
-            flash('Invalid email or password.', 'danger')
+            return jsonify({'success': True, 'message': 'Login successful! Redirecting...'}), 200
 
-    return None
+        else:
+            return jsonify({'success': False, 'message': 'Invalid username or password.'}), 400
+
+
+    return jsonify({'success': False, 'message': 'Login method must be POST.'}), 405
+
 
 def register_user_controller(request):
-     if request.method == 'POST':
+    if request.method == 'GET':
+        return render_template('auth/register.html')
+
+    elif request.method == 'POST':
         username = request.form.get('username')
         firstname = request.form.get('firstname')
         lastname = request.form.get('lastname')
         middlename = request.form.get('middlename', '')  # Optional
         grade = request.form.get('grade')
         email = request.form.get('email')
-        
         password = request.form.get('password')
         confirm_password = request.form.get('confirm_password')
 
-        # Validate required fields
+      
         if not all([username, firstname, lastname, grade, email, password, confirm_password]):
-            flash('All fields are required.', 'danger')
-            return None
+            return jsonify({'success': False, 'message': 'All fields are required.'}), 400
 
         # Validate passwords match
         if password != confirm_password:
-            flash('Passwords do not match.', 'danger')
-            return None
+            return jsonify({'success': False, 'message': 'Passwords do not match.'}), 400
 
         # Check if username already exists
         if UserService.get_user_by_username(username):
-            flash('Username is already taken.', 'danger')
-            return None
+            return jsonify({'success': False, 'message': 'Username is already taken.'}), 400
 
         # Create new user
         new_user = UserService.create_user(
@@ -60,12 +66,11 @@ def register_user_controller(request):
         )
 
         if new_user:
-            flash('Registration successful! Please log in.', 'success')
-            return redirect(url_for('main.login'))
+            return jsonify({'success': True, 'message': 'Registration successful! Please log in.'}), 200
         else:
-            flash('Failed to register. Please try again.', 'danger')
+            return jsonify({'success': False, 'message': 'Failed to register. Please try again.'}), 500
 
-     return None
+    return jsonify({'success': False, 'message': 'Invalid request method.'}), 405
 
 def logout_user_controller():
     logout_user()

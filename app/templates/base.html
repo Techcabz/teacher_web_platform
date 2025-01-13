@@ -29,9 +29,10 @@
       href="{{ url_for('static', filename='images/favicon.webp') }}"
     />
   </head>
-  <body >
+  <body>
     {% block content %}
     <!-- content -->
     {% endblock %}
+    <script src="{{ url_for('static', filename='js/validation.js') }}"></script>
   </body>
 </html>
