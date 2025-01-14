@@ -5,7 +5,7 @@ Follow these steps to run the Flask application:
 1. **Clone the repository:**
   ```bash
   git clone https://github.com/Techcabz/flask_project.git
-  cd flask_project
+  cd [project name]
   ```
 
 2. **Create a virtual environment:**
