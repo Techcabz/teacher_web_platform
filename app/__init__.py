@@ -1,13 +1,15 @@
 import os
 from flask import Flask, render_template
 from flask_login import LoginManager
-from config import DevelopmentConfig, ProductionConfig
+from config import DevelopmentConfig, ProductionConfig, Config
 from app.models.user_models import User
 from app.services.user_services import UserService
-from app.extensions import db
+from app.extensions import db, migrate
+from dotenv import load_dotenv
 
 def create_app():
     app = Flask(__name__)
+    load_dotenv()
     
     env = os.getenv('FLASK_ENV', 'development')
     if env == 'production':
@@ -15,8 +17,11 @@ def create_app():
     else:
         app.config.from_object(DevelopmentConfig)
 
+    Config.Initialize_database()
+    
     # Initialize SQLAlchemy
     db.init_app(app)
+    migrate.init_app(app, db)
     with app.app_context():
         db.create_all()
         UserService.create_default_admin()
@@ -32,8 +37,8 @@ def create_app():
         return User.query.get(int(user_id))
     
     # Register blueprints
-    from app.views.view import main
-    from app.views.view import admin
+    from app.views.route import main
+    from app.views.route import admin
     app.register_blueprint(main)
     app.register_blueprint(admin)
 

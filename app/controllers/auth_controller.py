@@ -32,10 +32,10 @@ def register_user_controller(request):
         return render_template('auth/register.html')
 
     elif request.method == 'POST':
-        username = request.form.get('username')
-        firstname = request.form.get('firstname')
-        lastname = request.form.get('lastname')
-        middlename = request.form.get('middlename', '')  # Optional
+        username = request.form.get('username').lower()
+        firstname = request.form.get('firstname').lower()
+        lastname = request.form.get('lastname').lower()
+        middlename = request.form.get('middlename', '').lower()  # Optional
         grade = request.form.get('grade')
         email = request.form.get('email')
         password = request.form.get('password')
