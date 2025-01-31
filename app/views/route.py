@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, redirect, url_for, request
 from flask_login import  current_user
 from ..controllers.auth_controller import login_user_controller,logout_user_controller,register_user_controller
-from ..utils.web_utils import web_guard
 from ..models.user_models import User
 from ..extensions import db
+from app.utils.auth_utils import web_guard
 
 main = Blueprint('main', __name__)
 admin = Blueprint('admin', __name__, url_prefix='/admin')

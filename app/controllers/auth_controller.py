@@ -2,7 +2,8 @@ from flask import flash, redirect, url_for, request,render_template
 from flask_login import login_user,logout_user
 from flask import session
 from app.services.user_services import UserService
-from ..extensions import db
+from app.utils.validation_utils import Validation
+from app.extensions import db
 from flask import jsonify
 
 
@@ -22,8 +23,6 @@ def login_user_controller(request):
 
         else:
             return jsonify({'success': False, 'message': 'Invalid username or password.'}), 400
-
-
     return jsonify({'success': False, 'message': 'Login method must be POST.'}), 405
 
 
@@ -73,7 +72,9 @@ def register_user_controller(request):
     return jsonify({'success': False, 'message': 'Invalid request method.'}), 405
 
 def logout_user_controller():
-    logout_user()
-    session.clear() 
-    flash('You have been logged out.', 'success')
-    return redirect(url_for('main.login'))
+    if request.method == 'POST':
+        logout_user()
+        session.clear() 
+        return jsonify({'success': True, 'message': 'You have been logged out'}), 200
+    else:
+        return jsonify({'success': False, 'message': 'Invalid request method.'}), 405
