@@ -43,3 +43,20 @@ def logout():
 def dashboard():
     return render_template('admin/dashboard.html')
 
+@admin.route('/category')
+@web_guard
+def category():
+    return render_template('admin/category.html')
+
+
+@admin.route('/docs')
+@web_guard
+def docs():
+    return render_template('admin/docs.html')
+
+
+@admin.route('/management')
+@web_guard
+def management():
+    return render_template('admin/management.html')
+

@@ -1,58 +1,93 @@
 {% extends "auth/template/auth_layout.html" %} {% block wrapper_content %}
 
-<!-- Login Box -->
-<div
-  class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-10"
->
-  <div
-    class="bg-gray-800 bg-opacity-45 p-6 rounded-md shadow-lg w-[320px] sm:w-[400px] backdrop-blur-sm"
-  >
-    <h2 class="text-xl font-bold text-center mb-4">Login</h2>
-    <form  id="loginForm" action="{{ url_for('main.login') }}" method="POST">
-      <!-- Username -->
-      <div class="mb-4">
-        <label for="username" class="block text-sm font-medium mb-1"
-          >Username</label
-        >
-        <input
-          id="username"
-          name="username"
-          type="text"
-          placeholder="Enter Username"
-          class="w-full px-3 py-2 border border-gray-600 rounded-md text-black"
-        />
+<div class="row g-0 app-auth-wrapper">
+  <div class="col-12 col-md-7 col-lg-6 auth-main-col text-center p-5">
+    <div class="d-flex flex-column align-content-end">
+      <div class="app-auth-body mt-5 mx-auto">
+        <div class="app-auth-branding mb-4">
+          <a class="app-logo" href=""
+            ><img
+              class="logo-icon me-2"
+              src="{{ url_for('static', filename='images/favicon.webp') }}"
+              alt="logo"
+          /></a>
+        </div>
+        <h2 class="auth-heading text-center mb-5">Log in to Portal</h2>
+        <div class="auth-form-container text-start">
+          <form
+            id="loginForm"
+            action="{{ url_for('main.login') }}"
+            method="POST"
+            class="auth-form login-form"
+          >
+            <div class="mb-3">
+              <label class="sr-only">Username</label>
+              <input
+                id="username"
+                name="username"
+                type="text"
+                class="form-control signin-email"
+                placeholder="Username"
+              />
+              <div id="usernameError" class="error-text"></div>
+            </div>
+            <div class="password mb-3">
+              <label class="sr-only">Password</label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                class="form-control signin-password"
+                placeholder="Password"
+              />
+              <div id="passwordError" class="error-text"></div>
+              <div class="extra mt-3 row justify-content-between">
+                <div class="col-6">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      value=""
+                      id="RememberPassword"
+                    />
+                    <label class="form-check-label" for="RememberPassword">
+                      Remember me
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="text-center">
+              <button
+                type="submit"
+                id="loginButton"
+                data-loading-text="Logging in..."
+                class="btn app-btn-primary w-100 theme-btn mx-auto"
+              >
+                Log In
+              </button>
+            </div>
+          </form>
+         
+        </div>
       </div>
-      <!-- Password -->
-      <div class="mb-4">
-        <label for="password" class="block text-sm font-medium mb-1"
-          >Password</label
-        >
-        <input
-          id="password"
-          name="password"
-          type="password"
-          placeholder="Enter Password"
-          class="w-full px-3 py-2 border border-gray-600 rounded-md text-black"
-        />
-      </div>
-      <!-- Login Button -->
-      <div class="mb-4">
-        <button
-          type="submit"
-          id="loginButton"
-          data-loading-text="Logging in..."
-          class="w-full bg-blue-700 hover:bg-blue-800 text-white font-medium py-2 rounded-md"
-        >
-          Log in
-        </button>
-      </div>
-    </form>
-    <!-- Footer Links -->
-    <div class="text-center text-sm">
-      Don't have an account?
-      <a href="{{ url_for('main.register') }}" class="text-blue-500 hover:underline">Sign up</a>
     </div>
   </div>
-</div>
 
+  <div class="col-12 col-md-5 col-lg-6 h-100 auth-background-col">
+    <div class="auth-background-holder"></div>
+    <div class="auth-background-mask"></div>
+    <div class="auth-background-overlay p-3 p-lg-5">
+      <div class="d-flex flex-column align-content-end h-100">
+        <div class="h-100">
+          <h2 class="text-white title-auth">
+            A Seamless Teachers Web Platform for Adhoc Comprehensive Data Access
+            in Magallanes Central Elementary School
+          </h2>
+        </div>
+      </div>
+    </div>
+    <!--//auth-background-overlay-->
+  </div>
+</div>
 {% endblock %}

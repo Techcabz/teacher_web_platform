@@ -1,0 +1,33 @@
+{% extends "admin/template/admin_layout.html" %} {% block wrapper_content %}
+
+<div class="app-content pt-3 p-md-3 p-lg-4">
+  <div class="container-xl">
+    <div class="row g-3 mb-4 align-items-center justify-content-between">
+      <div class="col-auto">
+        <h1 class="app-page-title mb-0">
+          {{ request.endpoint.split('.')[-1] | upper }}
+        </h1>
+      </div>
+    </div>
+
+    <div class="table-responsive p-3">
+      <table id="datatable1" class="table app-table-hover mb-0 text-left">
+        <thead>
+          <tr>
+            <th class="cell">No.</th>
+            <th class="cell">Name</th>
+            <th class="cell">Date</th>
+
+            <th class="cell"></th>
+          </tr>
+        </thead>
+
+        <tbody>
+        
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {% endblock %}
+</div>
