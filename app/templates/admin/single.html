@@ -5,18 +5,17 @@
     <div class="row g-3 mb-4 align-items-center justify-content-between">
       <div class="col-auto">
         <h1 class="app-page-title mb-0">
-          {{ request.endpoint.split('.')[-1] | upper }}
+          {{ category.name | upper }} FOLDER
         </h1>
       </div>
 
       <div class="col-auto">
-        <button
+        <a
           class="btn app-btn-primary theme-btn"
-          data-bs-toggle="modal"
-          data-bs-target="#addCategory"
+            href="{{ url_for('admin.docs') }}"
         >
-          ADD {{ request.endpoint.split('.')[-1] | upper }}
-        </button>
+          GO BACK TO DOCS
+        </a>
       </div>
     </div>
 
@@ -25,7 +24,9 @@
         <thead>
           <tr>
             <th class="cell">No.</th>
-            <th class="cell">Name</th>
+            <th class="cell">File Name</th>
+            <th class="cell">File Size</th>
+            <th class="cell">File Extension</th>
             <th class="cell">Date</th>
 
             <th class="cell"></th>

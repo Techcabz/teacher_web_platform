@@ -8,14 +8,30 @@
       src="https://kit.fontawesome.com/a076d05399.js"
       crossorigin="anonymous"
     ></script>
-    <script defer src="{{ url_for('static', filename='admin/plugins/fontawesome/js/all.min.js') }}"></script>
+    <script
+      defer
+      src="{{ url_for('static', filename='admin/plugins/fontawesome/js/all.min.js') }}"
+    ></script>
 
     <!-- App CSS -->
-    <link id="theme-style" rel="stylesheet" href="{{ url_for('static', filename='admin/css/portal.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
-    <link href="https://cdn.datatables.net/v/bs4/jq-3.6.0/jszip-2.5.0/dt-1.13.4/b-2.3.6/b-colvis-2.3.6/b-html5-2.3.6/b-print-2.3.6/r-2.4.1/sc-2.1.1/sb-1.4.2/sl-1.6.2/datatables.min.css" rel="stylesheet" />
+    <link
+      id="theme-style"
+      rel="stylesheet"
+      href="{{ url_for('static', filename='admin/css/portal.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/custom.css') }}"
+    />
+    <link
+      href="https://cdn.datatables.net/v/bs4/jq-3.6.0/jszip-2.5.0/dt-1.13.4/b-2.3.6/b-colvis-2.3.6/b-html5-2.3.6/b-print-2.3.6/r-2.4.1/sc-2.1.1/sb-1.4.2/sl-1.6.2/datatables.min.css"
+      rel="stylesheet"
+    />
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css"
+    />
     <!-- <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -33,12 +49,10 @@
       href="{{ url_for('static', filename='images/favicon.webp') }}"
     />
   </head>
-  <body >
-
-   
-      {% block content %}
-      <!-- content -->
-      {% endblock %}
+  <body>
+    {% block content %}
+    <!-- content -->
+    {% endblock %}
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ url_for('static', filename='admin/plugins/popper.min.js') }}"></script>
@@ -48,7 +62,16 @@
     <script src="https://cdn.datatables.net/v/bs4/jq-3.6.0/jszip-2.5.0/dt-1.13.4/b-2.3.6/b-colvis-2.3.6/b-html5-2.3.6/b-print-2.3.6/r-2.4.1/sc-2.1.1/sb-1.4.2/sl-1.6.2/datatables.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
-    <script src="{{ url_for('static', filename='js/validation.js') }}"></script>
+
+    <script
+      type="module"
+      src="{{ url_for('static', filename='js/validation.js') }}"
+    ></script>
+
+    <script
+      type="module"
+      src="{{ url_for('static', filename='js/modal.js') }}"
+    ></script>
     <script src="{{ url_for('static', filename='js/table.js') }}"></script>
   </body>
 </html>

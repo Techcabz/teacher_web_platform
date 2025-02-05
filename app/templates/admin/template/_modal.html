@@ -1,0 +1,48 @@
+<div
+  class="modal fade"
+  id="addCategory"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="profileModalLabel">
+          {{ request.endpoint.split('.')[-1] | upper }}
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="card" >
+          <div class="card-body p-3">
+            <form id="categoryForm" method="post">
+              <div>
+                <label
+                  for="name"
+                  class="block text-sm font-medium text-gray-700"
+                  >Name</label
+                >
+                <input type="text" id="ciname" name="ciname" class="form-control" />
+                <div id="cinameError" class="error-text"></div>
+              </div>
+              <button
+                type="submit"
+                id="categoryButton"
+                data-loading-text="Submitting..."
+                class="btn app-btn-primary theme-btn w-100 mt-4 mb-0"
+              >
+                Submit
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,4 +1,14 @@
-var notyf = new Notyf();
+import {
+  showErrorMessage,
+  hideErrorMessage,
+  isValidPassword,
+  isString,
+  isMString,
+  alert,
+  generateCodeString,
+  validatePhoneNumber,
+  setLoadingState,
+} from "./main.module.js";
 
 const registerForm = document.querySelector("#registerForm");
 if (registerForm) {
@@ -18,21 +28,19 @@ if (registerForm) {
       const data = await response.json();
       console.log(data);
       if (response.ok) {
-        const notification = notyf.success(data.message);
-        notification.on("click", ({ target, event }) => {
-          window.location.href = "/login";
-        });
+        alert("success", "top", data.message);
 
         setTimeout(() => {
           window.location.href = "/login";
         }, 2000);
       } else {
-        notyf.error(data.message);
+        alert("warning", "top", data.message);
         setLoadingState(registerButton, false);
       }
     } catch (error) {
       console.error("Error:", error);
-      notyf.error("An unexpected error occurred.");
+      alert("error", "top", error);
+     
       setLoadingState(registerButton, false);
     }
   });
@@ -56,37 +64,46 @@ if (loginForm) {
       const data = await response.json();
       console.log(data);
       if (response.ok) {
-        const notification = notyf.success(data.message);
-        notification.on("click", ({ target, event }) => {
-          window.location.href = "/admin/dashboard";
-        });
+        alert("success", "top", data.message);
 
         setTimeout(() => {
           window.location.href = "/admin/dashboard";
         }, 2000);
       } else {
-        notyf.error(data.message);
+        alert("warning", "top", data.message);
         setLoadingState(loginButton, false);
       }
     } catch (error) {
       console.error("Error:", error);
-      notyf.error("An unexpected error occurred.");
+      alert("error", "top", error);
       setLoadingState(loginButton, false);
     }
   });
 }
 
-function setLoadingState(button, isLoading) {
-  if (isLoading) {
-    const loadingText = button.getAttribute("data-loading-text");
-    button.setAttribute("data-original-text", button.textContent);
-    button.textContent = loadingText;
-    button.disabled = true;
-    button.classList.add("opacity-50", "cursor-not-allowed");
-  } else {
-    button.textContent = button.getAttribute("data-original-text");
-    button.removeAttribute("data-original-text");
-    button.disabled = false;
-    button.classList.remove("opacity-50", "cursor-not-allowed");
-  }
+const logout = document.querySelector("#logout");
+if (logout) {
+  logout.addEventListener("click", async (e) => {
+    e.preventDefault(); // Prevent immediate form submission
+
+    const confirmLogout = confirm("Are you sure you want to log out?");
+
+    if (confirmLogout) {
+      try {
+        const response = await fetch("/logout", { method: "POST" });
+        const data = await response.json();
+       
+        if (response.ok) {
+          alert("success", "top", data.message);
+          window.location.href = "/login"; 
+        } else {
+          alert("warning", "top", data.message);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("An unexpected error occurred.");
+      }
+    }
+  });
 }
+

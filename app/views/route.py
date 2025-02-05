@@ -1,9 +1,14 @@
 from flask import Blueprint, render_template, redirect, url_for, request
 from flask_login import  current_user
-from ..controllers.auth_controller import login_user_controller,logout_user_controller,register_user_controller
-from ..models.user_models import User
-from ..extensions import db
+from app.controllers.auth_controller import login_user_controller,logout_user_controller,register_user_controller
+from app.models.user_models import User
+from app.models.category_models import Category
+from app.models.file_models import File
+from app.extensions import db
 from app.utils.auth_utils import web_guard
+
+from app.controllers.categories_controller import categories
+from app.controllers.files_controller import files
 
 main = Blueprint('main', __name__)
 admin = Blueprint('admin', __name__, url_prefix='/admin')
@@ -32,7 +37,7 @@ def home():
         return result
     return render_template('auth/login.html')
 
-@main.route('/logout')
+@main.route('/logout', methods=['GET', 'POST'])
 def logout():
     return logout_user_controller()
 
@@ -43,17 +48,23 @@ def logout():
 def dashboard():
     return render_template('admin/dashboard.html')
 
-@admin.route('/category')
+@admin.route('/category',methods=['GET', 'POST', 'PUT', 'DELETE'])
 @web_guard
 def category():
-    return render_template('admin/category.html')
+    return categories(request)
 
-
-@admin.route('/docs')
+@admin.route('/docs',methods=['GET', 'POST', 'PUT', 'DELETE'])
 @web_guard
 def docs():
-    return render_template('admin/docs.html')
+    return files(request)
 
+@admin.route('/docs/<slug>')
+@web_guard
+def view_folder(slug):
+    category = Category.query.filter_by(slug=slug).first()
+    
+    files = category.files 
+    return render_template('admin/single.html', category=category, files=files)
 
 @admin.route('/management')
 @web_guard
