@@ -11,5 +11,15 @@ class Category(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
+    
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "slug": self.slug,
+            "created_at": self.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+            "updated_at": self.updated_at.strftime('%Y-%m-%d %H:%M:%S')
+        }
+        
     def __repr__(self):
         return f"<Category {self.id}: {self.name}>"

@@ -48,10 +48,11 @@ def logout():
 def dashboard():
     return render_template('admin/dashboard.html')
 
-@admin.route('/category',methods=['GET', 'POST', 'PUT', 'DELETE'])
+@admin.route('/category',methods=['GET', 'POST'])
+@admin.route('/category/<int:categoryy_id>', methods=['GET', 'PUT', 'DELETE'])
 @web_guard
-def category():
-    return categories(request)
+def category(categoryy_id=None):
+    return categories(request,categoryy_id)
 
 @admin.route('/docs',methods=['GET', 'POST', 'PUT', 'DELETE'])
 @web_guard

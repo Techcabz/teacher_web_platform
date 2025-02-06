@@ -78,6 +78,22 @@ export function alert(icon, position, title) {
   });
 }
 
+export function showConfirmationDialog(title, confirmText, denyText, onConfirm, onDeny) {
+  Swal.fire({
+    title: title,
+    showCancelButton: true,
+    confirmButtonText: confirmText,
+    denyButtonText: denyText,
+  }).then((result) => {
+    if (result.isConfirmed) {
+      if (typeof onConfirm === "function") onConfirm();
+    } else if (result.isDenied) {
+      if (typeof onDeny === "function") onDeny();
+    }
+  });
+}
+
+
 export function setLoadingState(button, isLoading) {
   if (isLoading) {
     const loadingText = button.getAttribute("data-loading-text");

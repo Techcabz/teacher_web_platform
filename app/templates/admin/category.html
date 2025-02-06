@@ -37,21 +37,24 @@
 
           <tr>
             <td class="cell">{{ loop.index }}</td>
-            <td class="cell">{{ category.name }}</td>
+            <td class="cell">{{ category.name | upper}}</td>
             <td class="cell">{{ category.created_at }}</td>
 
             <td class="cell text-end">
               <a
-                href="/admin/category/edit/{{ category.id }}"
-                class="btn-sm app-btn-secondary"
+                href="javascript:void(0);"
+                class="btn btn-sm btn-warning edit-category"
+                data-id="{{ category.id }}"
+                data-name="{{ category.name }}"
               >
-                Edit
+                <i class="fa fa-pencil fa-sm text-white"></i>
               </a>
               <a
-                href="/admin/category/delete/{{ category.id }}"
-                class="btn-sm app-btn-danger"
+                href="javascript:void(0);"
+                data-id="{{ category.id }}"
+                class="btn btn-sm btn-danger delete-category"
               >
-                Delete
+                <i class="fa fa-trash fa-sm text-white"></i>
               </a>
             </td>
             {% endfor %}
