@@ -4,7 +4,7 @@ Follow these steps to run the Flask application:
 
 1. **Clone the repository:**
   ```bash
-  git clone https://github.com/Techcabz/flask_project.git
+  git clone https://github.com/Techcabz/teacher_web_platform.git
   cd [project name]
   ```
 
@@ -28,16 +28,12 @@ Follow these steps to run the Flask application:
   pip install -r requirements.txt
   ```
 
-5. **Set the Flask application environment variable:**
-  - On Windows:
-    ```bash
-    set FLASK_APP=run.py
-    set FLASK_ENV=development
-    ```
-  - On macOS/Linux:
-    ```bash
-    export FLASK_APP=run.py
-    ```
+5. **Run the database migrations:**
+  ```bash
+  flask db init        # Initialize the migrations folder (only once)
+  flask db migrate -m "Initial migration"
+  flask db upgrade
+  ```
 
 6. **Run the Flask application:**
   ```bash
