@@ -33,10 +33,7 @@ def home():
     if current_user.is_authenticated and request.endpoint != 'admin.dashboard':
         return redirect(url_for('admin.dashboard'))
 
-    result = register_user_controller(request)
-    if result:
-        return result
-    return render_template('auth/login.html')
+    return login_user_controller(request)
 
 @main.route('/logout', methods=['GET', 'POST'])
 def logout():
