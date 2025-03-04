@@ -1,0 +1,12 @@
+{% extends "base.html" %} {% block content %}
+<div class="app ">
+    <header class="app-header fixed-top">
+        {% include 'users/template/partials/_header.html' %}
+        {% include 'users/template/partials/_sidebar.html' %}
+       
+    </header>
+  <div class="app-wrapper">{% block wrapper_content %} {% endblock %}</div>
+  {% include 'users/template/_modal.html' %}
+</div>
+
+{% endblock %}

@@ -39,8 +39,8 @@ if (registerForm) {
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("error", "top", error);
-     
+      alert("Unexpected error. Please try again later.");
+
       setLoadingState(registerButton, false);
     }
   });
@@ -75,7 +75,8 @@ if (loginForm) {
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("error", "top", error);
+      alert("Unexpected error. Please try again later.");
+
       setLoadingState(loginButton, false);
     }
   });

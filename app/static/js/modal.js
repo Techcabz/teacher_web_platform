@@ -225,7 +225,7 @@ if (uploadForm) {
       if (response.ok) {
         alert("success", "top", data.message);
         setTimeout(() => {
-          window.location.href = "/admin/docs";
+          window.location.href = "/user/docs";
         }, 2000);
       } else {
         showErrorMessage(authError, input, data.message);

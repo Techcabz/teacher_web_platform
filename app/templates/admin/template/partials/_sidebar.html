@@ -4,13 +4,25 @@
         <a href="#" id="sidepanel-close" class="sidepanel-close d-xl-none">&times;</a>
         <div class="app-branding">
             <a class="app-logo" href="">
-<!--                 
-                <span>ADHOC</span>
-                 -->
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="" />
             </a>
 
+            <style>
+                .app-logo {
+
+                    position: relative;
+                }
+
+                .app-logo img {
+                    position: absolute;
+                    left: -15px;
+                    top: -30px;
+                    width: 200px;
+                }
+            </style>
 
         </div>
+        <hr class="m-0">
         <nav id="app-nav-main" class="app-nav app-nav-main flex-grow-1">
             <ul class="app-menu list-unstyled accordion" id="menu-accordion">
                 <li class="nav-item">

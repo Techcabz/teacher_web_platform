@@ -21,7 +21,6 @@
             class="auth-form login-form"
           >
             <div class="mb-3">
-              <label class="sr-only">Username</label>
               <input
                 id="username"
                 name="username"
@@ -32,7 +31,6 @@
               <div id="usernameError" class="error-text"></div>
             </div>
             <div class="password mb-3">
-              <label class="sr-only">Password</label>
               <input
                 id="password"
                 name="password"
@@ -66,6 +64,7 @@
               >
                 Log In
               </button>
+              <span>Not yet registerd? <a href="{{ url_for('main.register') }}">Register</a></span>
             </div>
           </form>
          

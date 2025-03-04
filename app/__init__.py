@@ -24,7 +24,7 @@ def create_app():
     # Initialize SQLAlchemy
     db.init_app(app)
     Migrate(app, db)
-    
+   
     with app.app_context():
         db.create_all()
         UserService.create_default_admin()

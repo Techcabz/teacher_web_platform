@@ -26,11 +26,10 @@
           <a class="app-logo" href=""><img class="logo-icon me-2"
               src="{{ url_for('static', filename='images/favicon.webp') }}" alt="logo" /></a>
         </div>
-        <h2 class="auth-heading text-center mb-5">Register Portal</h2>
+        <h2 class="auth-heading text-center mb-3">Register Portal</h2>
         <div class="auth-form-container text-start">
-          <form id="loginForm" action="{{ url_for('main.login') }}" method="POST" class="auth-form login-form">
+          <form id="registerForm" action="{{ url_for('main.register') }}" method="POST" class="auth-form login-form">
             <div class="mb-3">
-              <label class="sr-only">Username</label>
               <input id="username" name="username" type="text" class="form-control signin-email"
                 placeholder="Username" />
               <div id="usernameError" class="error-text"></div>
@@ -38,56 +37,51 @@
             <div class="mb-3 row  ">
               <!-- First Name -->
               <div class="col">
-                <label class="sr-only">Firstname</label>
+                
                 <input id="firstname" name="firstname" type="text" placeholder="First Name" class="form-control"
                   required />
               </div>
-              <!-- Last Name -->
-              <div class="col">
-                <label class="sr-only">Lastname</label>
-                <input id="lastname" name="lastname" type="text" placeholder="Last Name" class="form-control"
-                  required />
-              </div>
+             
 
 
             </div>
             <div class="row mb-3">
+               <!-- Last Name -->
+               <div class="col">
+               <input id="lastname" name="lastname" type="text" placeholder="Last Name" class="form-control"
+                  required />
+              </div>
               <!-- Middle Name -->
               <div class="col">
-                <label class="sr-only">MiddleName</label>
                 <input id="middlename" name="middlename" type="text" placeholder="Middle Name" class="form-control" />
               </div>
-              <div class="col">
-                <label class="sr-only">Grade</label>
-                <input id="grade" name="grade" type="text" placeholder="Grade Level" class="form-control" />
-              </div>
+             
             </div>
             <div class="password mb-3">
-              <label class="sr-only">Email</label>
               <input id="email" name="email" type="email" class="form-control signin-password" placeholder="Email" />
               <div id="passwordError" class="error-text"></div>
 
             </div>
 
             <div class="password mb-3">
-              <label class="sr-only">Password</label>
               <input id="password" name="password" type="password" class="form-control signin-password"
                 placeholder="Password" />
               <div id="passwordError" class="error-text"></div>
 
             </div>
             <div class="password mb-3">
-              <label class="sr-only">Confirm Password</label>
               <input id="confirm_password" name="confirm_password" type="password" class="form-control signin-password"
                 placeholder="Confirm Password" />
               <div id="passwordError" class="error-text"></div>
 
             </div>
             <div class="text-center">
-              <button type="submit" id="loginButton" data-loading-text="Logging in..."
+              <button type="submit" id="registerButton" data-loading-text="Registering..."
                 class="btn app-btn-primary w-100 theme-btn mx-auto">
                 Register
               </button>
+              <span>Already have an account? <a href="{{ url_for('main.login') }}">Login</a></span>
+           
             </div>
           </form>
 

@@ -16,15 +16,22 @@ class Validation:
     def is_valid_number(value):
         """Check if the value is a positive integer."""
         return value.isdigit() and int(value) > 0
-    
+
     @staticmethod
-    def format_file_size(size_in_bytes):
-        """Convert bytes to KB, MB, or GB dynamically."""
-        if size_in_bytes < 1024:
-            return f"{size_in_bytes} B"
-        elif size_in_bytes < 1024 * 1024:
-            return f"{size_in_bytes / 1024:.2f} KB"
-        elif size_in_bytes < 1024 * 1024 * 1024:
-            return f"{size_in_bytes / (1024 * 1024):.2f} MB"
-        else:
-            return f"{size_in_bytes / (1024 * 1024 * 1024):.2f} GB"
+    def is_strong_password(password):
+        """
+        Check if the password is strong:
+        - At least 8 characters long
+        - Contains at least one uppercase letter
+        - Contains at least one lowercase letter
+        - Contains at least one digit
+        - Contains at least one special character (@, #, $, etc.)
+        """
+        password_pattern = (
+            r"^(?=.*[A-Z])"       # At least one uppercase letter
+            r"(?=.*[a-z])"        # At least one lowercase letter
+            r"(?=.*\d)"           # At least one digit
+            r"(?=.*[@$!%*?&])"    # At least one special character
+            r"[A-Za-z\d@$!%*?&]{8,}$"  # Minimum 8 characters
+        )
+        return bool(re.match(password_pattern, password))

@@ -1,0 +1,103 @@
+{% extends "users/template/user_layout.html" %} {% block wrapper_content %}
+
+<div class="app-content pt-3 p-md-3 p-lg-4">
+    <div class="container-xl">
+        <div class="row g-3 mb-4 align-items-center justify-content-between">
+            <div class="col-auto">
+                <h1 class="app-page-title mb-0">
+                    {{ category.name | upper }} FOLDER
+                </h1>
+            </div>
+
+            <div class="col-auto">
+                <a class="btn app-btn-primary theme-btn" href="{{ url_for('main.user_docs') }}">
+                    GO BACK TO DOCS
+                </a>
+            </div>
+        </div>
+
+        <div class="table-responsive p-3">
+            <table id="datatable1" class="table app-table-hover mb-0 text-left">
+                <thead>
+                    <tr>
+                        <th class="cell">No.</th>
+                        <th class="cell">File Name</th>
+                        <th class="cell">File Size</th>
+                        <th class="cell">File Extension</th>
+                        <th class="cell">Uploader</th>
+                        <th class="cell">Date</th>
+
+                        <th class="cell"></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for file in files %}
+                    {% if file.uploader_id == session['user_id'] %}
+                    <tr>
+                        <td class="cell">{{ loop.index }}</td>
+                        <td class="cell">
+                            <span class="d-inline-block text-truncate" style="max-width: 200px;"
+                                data-bs-toggle="tooltip" title="{{ file.filename }}">
+                                {{ file.filename }}
+                            </span>
+                        </td>
+                        <td class="cell">
+                            {% if file.file_size < 1024 %} {{ file.file_size }} B {% elif file.file_size < 1048576 %} {{
+                                (file.file_size / 1024) | round(2) }} KB {% else %} {{ (file.file_size / 1048576) |
+                                round(2) }} MB {% endif %} </td>
+                        <td class="cell">{{ file.file_extension.upper() }}</td>
+                        <td class="cell">
+                            {% if file.firstname and file.lastname %}
+                            {{ file.firstname }} {% if file.middlename %}{{ file.middlename }}{% endif %} {{
+                            file.lastname }}
+                            {% else %}
+                            Unknown
+                            {% endif %}
+                        </td>
+                        <td class="cell">{{ file.uploaded_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+
+                        <td class="cell">
+                            <button class="btn btn-primary btn-sm text-white"
+                                onclick="handleFile('{{ file.filename }}', '{{ file.file_extension }}')">
+                                <i class="fas fa-print text-white"></i> Print / Download
+                            </button>
+
+                        </td>
+
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+    <script>
+        function handleFile(filename, fileExt) {
+            let fileUrl = '{{ url_for("static", filename="upload/") }}' + filename;
+
+            if (fileExt.toLowerCase() === 'pdf') {
+                // Open and print PDFs
+                let printWindow = window.open(fileUrl, '_blank');
+                if (printWindow) {
+                    printWindow.onload = function () {
+                        printWindow.print();
+                    };
+                } else {
+                    alert("Please allow pop-ups to print the file.");
+                }
+            } else {
+                // Download DOCX/XLSX instead
+                let downloadLink = document.createElement("a");
+                downloadLink.href = fileUrl;
+                downloadLink.download = filename;
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+            }
+        }
+    </script>
+
+    {% endblock %}
+</div>

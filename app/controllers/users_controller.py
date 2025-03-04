@@ -3,7 +3,7 @@ import re
 import fitz  
 import openpyxl  
 from io import BytesIO
-from flask import current_app, request, jsonify
+from flask import current_app, request, jsonify,render_template
 from werkzeug.utils import secure_filename
 from docx import Document
 from config import Config 
@@ -166,3 +166,8 @@ def delete_file(request, file_id=None):
         file_service.delete(file.id)
 
         return jsonify({"success": True, "message": "File deleted successfully!"})
+    
+def docs_list(request):
+    if request.method == 'GET':
+        categories = categories_service.get()
+        return render_template('users/docs.html', categories=categories)

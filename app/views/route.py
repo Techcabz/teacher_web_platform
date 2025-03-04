@@ -1,12 +1,12 @@
 from flask import Blueprint, render_template, redirect, url_for, request,send_from_directory, current_app
 from flask_login import  current_user
 from app.controllers.auth_controller import login_user_controller,logout_user_controller,register_user_controller
-from app.controllers.users_controller import upload_file,delete_file
+from app.controllers.users_controller import upload_file,delete_file,docs_list
 from app.models.user_models import User
 from app.models.category_models import Category
 from app.models.file_models import File
 from app.extensions import db
-from app.utils.auth_utils import web_guard
+from app.utils.auth_utils import web_guard, web_guard_user
 import os
 from app.controllers.categories_controller import categories
 from app.controllers.files_controller import files
@@ -92,3 +92,26 @@ def management():
 def upload_files():
     return upload_file(request)
 
+
+# USER DASHBOARD
+@main.route('/user/dashboard')
+@web_guard_user
+def user_dashboard():
+    return render_template('users/dashboard.html')
+
+@main.route('/user/docs')
+@web_guard_user
+def user_docs():
+    return docs_list(request)
+
+@main.route('/user/docs/<slug>')
+@web_guard_user
+def view_folder(slug):
+    category = Category.query.filter_by(slug=slug).first()
+
+    files = File.query.filter_by(category_id=category.id).join(User).add_columns(
+        File.id, File.filename, File.file_size, File.file_extension,File.uploader_id,
+        File.uploaded_at, User.firstname, User.middlename, User.lastname
+    ).all()
+
+    return render_template('users/single.html', category=category, files=files)

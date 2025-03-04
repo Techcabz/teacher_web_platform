@@ -11,6 +11,19 @@ def web_guard(func):
 
         if session.get('role') != 'admin': 
             flash('Access denied: Admins only!', 'error')
+            return redirect(url_for('main.user_dashboard')) 
+        return func(*args, **kwargs)
+    return wrapper
+
+
+def web_guard_user(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if not current_user.is_authenticated:
+            flash('Please log in to access this page.', 'danger')
             return redirect(url_for('main.login')) 
+
+        if session.get('role') != 'teacher': 
+            return redirect(url_for('main.user_dashboard')) 
         return func(*args, **kwargs)
     return wrapper

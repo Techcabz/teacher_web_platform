@@ -70,7 +70,7 @@ class UserService:
                 "firstname": "none",
                 "lastname": "none",
                 "middlename": "",
-                "grade": "none",
+                "status": 1,
                 "email": "none"
                
             }
