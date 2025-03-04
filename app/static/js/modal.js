@@ -137,6 +137,14 @@ async function showUpdateForm(id) {
     form.querySelector("#ciname").value = data.name || "";
     form.querySelector("#cid").value = data.id || "";
 
+    const keywordContainer = document.getElementById("keywordsContainerUpdate");
+    keywordContainer.innerHTML = "";
+
+    // Populate keywords dynamically
+    if (data.keywords && Array.isArray(data.keywords)) {
+      data.keywords.forEach(keyword => addKeywordUpdate(keyword));
+    }
+
     var updateModal = new bootstrap.Modal(
       document.getElementById("updateCategory")
     );
@@ -146,6 +154,8 @@ async function showUpdateForm(id) {
     alert("error", "top", "An unexpected error occurred.");
   }
 }
+
+
 async function deleteCategory(id) {
   showConfirmationDialog(
     "Are you sure you want to delete this category?",
@@ -176,6 +186,60 @@ async function deleteCategory(id) {
   );
 }
 
+const uploadForm = document.querySelector("#uploadForm");
+if (uploadForm) {
+  uploadForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+    const button = document.querySelector("#uploadButton");
+    const form = document.getElementById("uploadForm");
+    const authError = form.querySelector("#docs_fileError");
+    const input = form.querySelector("#docs_file");
+
+    if (!authError) {
+      console.error("Error: error element not found!");
+      return;
+    }
+
+    setLoadingState(button, true);
+
+    const docs_fileValue = formData.get("docs_file");
+
+    if (!docs_fileValue) {
+      showErrorMessage(authError, input, "Input is required.");
+      setLoadingState(button, false);
+      return;
+    } else {
+      hideErrorMessage(authError, input);
+    }
+
+    try {
+      const response = await fetch("/admin/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("success", "top", data.message);
+        setTimeout(() => {
+          window.location.href = "/admin/docs";
+        }, 2000);
+      } else {
+        showErrorMessage(authError, input, data.message);
+        alert("warning", "top", data.message);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("error", "top", "An unexpected error occurred.");
+    } finally {
+      setLoadingState(button, false);
+    }
+  });
+}
+
 // dom calling
 document.addEventListener("DOMContentLoaded", function () {
   document.querySelectorAll(".edit-category").forEach((button) => {
@@ -192,4 +256,33 @@ document.addEventListener("DOMContentLoaded", function () {
       deleteCategory(id);
     });
   });
+
+  document.querySelectorAll(".delete-file").forEach(button => {
+    button.addEventListener("click", function () {
+      let fileId = this.getAttribute("data-file-id");
+
+      if (confirm("Are you sure you want to delete this file?")) {
+        fetch(`/admin/delete_file/${fileId}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert("success", "top", data.message);
+       
+            location.reload();
+          } else {
+            alert("warning", "top", data.message);
+          }
+        })
+        .catch(error => {
+          console.error("Error:", error);
+        });
+      }
+    });
+  });
+
 });

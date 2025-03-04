@@ -34,6 +34,13 @@ class Config:
     JSON_SORT_KEYS = False
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024
 
+    FILE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "."))
+    UPLOAD_PATH = os.getenv("UPLOAD_PATH", os.path.join(FILE_DIR, r"app\static\upload"))
+
+    # Ensure the directory exists
+    if not os.path.exists(UPLOAD_PATH):
+        os.makedirs(UPLOAD_PATH, exist_ok=True)
+
     @classmethod
     def Initialize_database(cls):
         """Auto-create MySQL database if selected and doesn't exist."""

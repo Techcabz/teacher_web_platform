@@ -16,3 +16,15 @@ class Validation:
     def is_valid_number(value):
         """Check if the value is a positive integer."""
         return value.isdigit() and int(value) > 0
+    
+    @staticmethod
+    def format_file_size(size_in_bytes):
+        """Convert bytes to KB, MB, or GB dynamically."""
+        if size_in_bytes < 1024:
+            return f"{size_in_bytes} B"
+        elif size_in_bytes < 1024 * 1024:
+            return f"{size_in_bytes / 1024:.2f} KB"
+        elif size_in_bytes < 1024 * 1024 * 1024:
+            return f"{size_in_bytes / (1024 * 1024):.2f} MB"
+        else:
+            return f"{size_in_bytes / (1024 * 1024 * 1024):.2f} GB"

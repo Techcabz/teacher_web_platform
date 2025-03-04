@@ -10,11 +10,7 @@
       </div>
 
       <div class="col-auto">
-        <button
-          class="btn app-btn-primary theme-btn"
-          data-bs-toggle="modal"
-          data-bs-target="#addCategory"
-        >
+        <button class="btn app-btn-primary theme-btn" data-bs-toggle="modal" data-bs-target="#addCategory">
           ADD {{ request.endpoint.split('.')[-1] | upper }}
         </button>
       </div>
@@ -26,6 +22,7 @@
           <tr>
             <th class="cell">No.</th>
             <th class="cell">Name</th>
+            <th class="cell">Keywords</th>
             <th class="cell">Date</th>
 
             <th class="cell"></th>
@@ -38,22 +35,23 @@
           <tr>
             <td class="cell">{{ loop.index }}</td>
             <td class="cell">{{ category.name | upper}}</td>
+            <td class="cell">
+              <div class="text-truncate"
+                style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                data-bs-toggle="tooltip" data-bs-placement="top" title="{{ category.keywords | join(', ') }}">
+                {% for keyword in category.keywords %}
+                <span class="badge bg-primary">{{ keyword }}</span>
+                {% endfor %}
+              </div>
+            </td>
             <td class="cell">{{ category.created_at }}</td>
 
             <td class="cell text-end">
-              <a
-                href="javascript:void(0);"
-                class="btn btn-sm btn-warning edit-category"
-                data-id="{{ category.id }}"
-                data-name="{{ category.name }}"
-              >
+              <a href="javascript:void(0);" class="btn btn-sm btn-warning edit-category" data-id="{{ category.id }}"
+                data-name="{{ category.name }}">
                 <i class="fa fa-pencil fa-sm text-white"></i>
               </a>
-              <a
-                href="javascript:void(0);"
-                data-id="{{ category.id }}"
-                class="btn btn-sm btn-danger delete-category"
-              >
+              <a href="javascript:void(0);" data-id="{{ category.id }}" class="btn btn-sm btn-danger delete-category">
                 <i class="fa fa-trash fa-sm text-white"></i>
               </a>
             </td>
