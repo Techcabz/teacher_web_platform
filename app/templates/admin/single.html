@@ -47,11 +47,20 @@
                 endif %} </td>
             <td class="cell">{{ file.file_extension.upper() }}</td>
             <td class="cell">
-              {% if file.firstname and file.lastname %}
+              <div class="text-truncate"
+                style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                data-bs-toggle="tooltip" data-bs-placement="top" title=" {% if file.firstname and file.lastname %}
               {{ file.firstname }} {% if file.middlename %}{{ file.middlename }}{% endif %} {{ file.lastname }}
               {% else %}
               Unknown
-              {% endif %}
+              {% endif %}">
+                {% if file.firstname and file.lastname %}
+                {{ file.firstname }} {% if file.middlename %}{{ file.middlename }}{% endif %} {{ file.lastname }}
+                {% else %}
+                Unknown
+                {% endif %}
+              </div>
+
             </td>
             <td class="cell">{{ file.uploaded_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
 
@@ -114,7 +123,7 @@
     .dropdown-toggle::after {
       display: none !important;
     }
-  
+
     .dropdown-toggle i {
       font-weight: bold !important;
     }

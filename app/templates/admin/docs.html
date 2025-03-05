@@ -5,35 +5,36 @@
     <div class="row g-3 mb-4 align-items-center justify-content-between">
       <div class="col-auto">
         <h1 class="app-page-title mb-0">
-          {{ request.endpoint.split('.')[-1] | upper }}
+          DOCUMENTS
         </h1>
       </div>
       <div class="col-auto position-relative">
         <input type="text" id="search-folder" class="form-control ps-5" placeholder="Search folder..." />
-        <i class="fas fa-search position-absolute text-muted" style="left: 15px; top: 50%; transform: translateY(-50%);"></i>
+        <i class="fas fa-search position-absolute text-muted"
+          style="left: 15px; top: 50%; transform: translateY(-50%);"></i>
       </div>
-      
+
       <div class="col-auto d-none">
         <button class="btn app-btn-primary theme-btn" data-bs-toggle="modal" data-bs-target="#addUpload">
           ADD {{ request.endpoint.split('.')[-1] | upper }}
         </button>
       </div>
     </div>
-<hr class="mt-0">
+    <hr class="mt-0">
     <div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 g-3">
+      {% if categories %}
       {% for category in categories %}
-
       <div class="col">
         <a href="{{ url_for('admin.view_folder', slug=category.slug) }}" class="text-decoration-none">
-          <div class="card shadow-sm p-3 ">
+          <div class="card shadow-sm p-3">
             <div class="mb-2 d-flex flex-row align-items-center">
               <!-- Folder Icon -->
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="size-8 text-primary me-3" style="width: 40px; height: 40px">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44
-                  -2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0
-                  2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5
-                  0 0 1-1.06-.44Z" />
+                            -2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0
+                            2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5
+                            0 0 1-1.06-.44Z" />
               </svg>
 
               <!-- Folder Name -->
@@ -41,19 +42,71 @@
                 data-bs-content="{{ category.name | upper }}" data-bs-placement="bottom">
                 {{ category.name | upper }}
               </p>
-
             </div>
             <hr class="m-0 p-0">
             <div>
               <small style="color: gray; font-size: 10px;">{{ category.created_at }}</small>
             </div>
           </div>
-
         </a>
       </div>
       {% endfor %}
+      {% else %}
+      <!-- Centered Empty State -->
+      <div class="d-flex justify-content-center align-items-center w-100" style="min-height: 50vh;">
+        <div class="text-center">
+          <i class="fas fa-folder-open fa-3x text-muted"></i>
+          <p class="mt-3 mb-0 text-muted fw-bold">No folders available.</p>
+        </div>
+      </div>
+      {% endif %}
+      <div class="d-flex justify-content-center align-items-center w-100 d-none" id="empty-state" style="min-height: 50vh;">
+        <div class="text-center">
+          <i class="fas fa-folder-open fa-3x text-muted"></i>
+          <p class="mt-3 mb-0 text-muted fw-bold">Folder not found.</p>
+        </div>
+      </div>
     </div>
+
+
   </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const searchInput = document.getElementById("search-folder");
+      const folderCards = document.querySelectorAll(".col"); 
+
+      searchInput.addEventListener("keyup", function () {
+        const searchText = searchInput.value.toLowerCase().trim().replace(/\s+/g, ".*");
+        const searchRegex = new RegExp(searchText, "i"); 
+        let hasResults = false;
+
+        folderCards.forEach(col => {
+          const folderName = col.querySelector("p").textContent.toLowerCase();
+
+          if (searchRegex.test(folderName)) {
+            col.classList.remove("d-none"); 
+            hasResults = true;
+          } else {
+            col.classList.add("d-none"); 
+          }
+        });
+
+        const emptyState = document.getElementById("empty-state");
+        if (emptyState) { 
+          if(hasResults){
+            emptyState.classList.add("d-none");
+          } else {
+            emptyState.classList.remove("d-none");
+         
+          }
+          emptyState.style.display = hasResults ? "none" : "flex";
+        }
+      });
+    });
+  </script>
 
   {% endblock %}
+
+
+
 </div>

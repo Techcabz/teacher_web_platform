@@ -3,7 +3,7 @@ import re
 import fitz  
 import openpyxl  
 from io import BytesIO
-from flask import current_app, request, jsonify,render_template
+from flask import current_app, request, jsonify,render_template,redirect,url_for
 from werkzeug.utils import secure_filename
 from docx import Document
 from config import Config 
@@ -173,3 +173,25 @@ def docs_list(request):
     if request.method == 'GET':
         categories = categories_service.get()
         return render_template('users/docs.html', categories=categories)
+    
+
+def dashboard_report_users():
+    if not current_user.is_authenticated:
+        return redirect(url_for('auth.login'))
+    
+    # Fetch categories
+    categories = categories_service.get()
+    files = file_service.get(uploader_id=current_user.id)  
+
+    
+    file_data = {category.name: 0 for category in categories}  
+
+    for file in files:
+        if file.category_id in [category.id for category in categories]:
+            category_name = next(cat.name for cat in categories if cat.id == file.category_id)
+            file_data[category_name] += 1
+    print(file_data)
+    return render_template(
+        'users/dashboard.html',
+        file_data=file_data  
+    )

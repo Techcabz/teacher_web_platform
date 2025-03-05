@@ -3,50 +3,19 @@ from flask import jsonify
 from app.services.services import CRUDService
 from app.models.user_models import User
 from app.utils.validation_utils import Validation
+from app.models.file_models import File 
+from app.models.category_models import Category
 
 user_services = CRUDService(User)
+file_services = CRUDService(File)
+category_services = CRUDService(Category)
 
 def cusers(request,users_id=None):
     if request.method == 'GET':
         users = user_services.get()
         pending_count = sum(1 for user in users if user.status == 0)
-        print(users)
+       
         return render_template('admin/users.html', users=users, pendingCount=pending_count)
-    elif request.method == 'POST':
-        return render_template('admin/users.html', users=users)
-    elif request.method == 'PUT':
-        # Handle updating a category
-        # category_id = request.form['id']
-        # name = request.form['name'].strip().lower()
-        
-        # if not all([category_id, name]):
-        #     return jsonify({'success': False, 'message': 'All fields are required.'}), 400
-        
-        # existing_category = category_service.get_one(id=category_id)
-        # if not existing_category:
-        #     return jsonify({'success': False, 'message': 'Category not found.'}), 404
-        
-        # updated_category = category_service.update(category_id, name=name)
-        # if updated_category:
-        #     return jsonify({'success': True, 'message': 'Category updated successfully!'}), 200
-        return jsonify({'success': False, 'message': 'Error updating category.'}), 500
-
-    elif request.method == 'DELETE':
-        # Handle deleting a category
-        # category_id = request.form['id']
-        
-        # if not category_id:
-        #     return jsonify({'success': False, 'message': 'Category ID is required.'}), 400
-        
-        # existing_category = category_service.get_one(id=category_id)
-        # if not existing_category:
-        #     return jsonify({'success': False, 'message': 'Category not found.'}), 404
-        
-        # delete_success = category_service.delete(category_id)
-        # if delete_success:
-        #     return jsonify({'success': True, 'message': 'Category deleted successfully!'}), 200
-        return jsonify({'success': False, 'message': 'Error deleting category.'}), 500
-
     return jsonify({'success': False, 'message': 'Create method must be POST.'}), 405
 
 def user_approved(request,users_id=None):
@@ -74,3 +43,27 @@ def user_disapproved(request,users_id=None):
         return jsonify({'success': False, 'message': 'User remove successfully.'}), 200
     
     return jsonify({'success': False, 'message': 'Create method must be DELETE.'}), 405
+
+def dashboard_report():
+    users = user_services.get()
+    pending_count = sum(1 for user in users if user.status == 0)
+    total_count = len(users)
+
+    # Fetch categories
+    categories = category_services.get()
+    files = file_services.get()  
+
+    
+    file_data = {category.name: 0 for category in categories}  
+
+    for file in files:
+        if file.category_id in [category.id for category in categories]:
+            category_name = next(cat.name for cat in categories if cat.id == file.category_id)
+            file_data[category_name] += 1
+    print(file_data)
+    return render_template(
+        'admin/dashboard.html',
+        total_count=total_count,
+        pendingCount=pending_count,
+        file_data=file_data  
+    )

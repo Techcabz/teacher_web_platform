@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, redirect, url_for, request,send_from_directory, current_app
 from flask_login import  current_user
 from app.controllers.auth_controller import login_user_controller,logout_user_controller,register_user_controller
-from app.controllers.users_controller import upload_file,delete_file,docs_list
-from app.controllers.admin_controller import cusers,user_approved,user_disapproved
+from app.controllers.users_controller import upload_file,delete_file,docs_list,dashboard_report_users
+from app.controllers.admin_controller import cusers,user_approved,user_disapproved, dashboard_report
 from app.models.user_models import User
 from app.models.category_models import Category
 from app.models.file_models import File
@@ -45,7 +45,7 @@ def logout():
 @admin.route('/dashboard')
 @web_guard
 def dashboard():
-    return render_template('admin/dashboard.html')
+    return dashboard_report()
 
 @admin.route('/category',methods=['GET', 'POST'])
 @admin.route('/category/<int:categoryy_id>', methods=['GET', 'PUT', 'DELETE'])
@@ -111,7 +111,7 @@ def user_disapproveds(users_id=None):
 @main.route('/user/dashboard')
 @web_guard_user
 def user_dashboard():
-    return render_template('users/dashboard.html')
+    return dashboard_report_users()
 
 @main.route('/user/docs')
 @web_guard_user

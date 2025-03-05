@@ -64,8 +64,48 @@
         </div>
       </div>
       {% endif %}
+      <div class="d-flex justify-content-center align-items-center w-100 d-none" id="empty-state" style="min-height: 50vh;">
+        <div class="text-center">
+          <i class="fas fa-folder-open fa-3x text-muted"></i>
+          <p class="mt-3 mb-0 text-muted fw-bold">Folder not found.</p>
+        </div>
+      </div>
     </div>
-
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById("search-folder");
+        const folderCards = document.querySelectorAll(".col"); 
+  
+        searchInput.addEventListener("keyup", function () {
+          const searchText = searchInput.value.toLowerCase().trim().replace(/\s+/g, ".*");
+          const searchRegex = new RegExp(searchText, "i"); 
+          let hasResults = false;
+  
+          folderCards.forEach(col => {
+            const folderName = col.querySelector("p").textContent.toLowerCase();
+  
+            if (searchRegex.test(folderName)) {
+              col.classList.remove("d-none"); 
+              hasResults = true;
+            } else {
+              col.classList.add("d-none"); 
+            }
+          });
+  
+          const emptyState = document.getElementById("empty-state");
+          if (emptyState) { 
+            if(hasResults){
+              emptyState.classList.add("d-none");
+            } else {
+              emptyState.classList.remove("d-none");
+           
+            }
+            emptyState.style.display = hasResults ? "none" : "flex";
+          }
+        });
+      });
+    </script>
+  
 
   </div>
 
