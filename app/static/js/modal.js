@@ -251,7 +251,7 @@ if (uploadForm) {
         alert("warning", "top", data.message);
       }
       setLoadingState(button, false);
-      progressContainer.style.display = "none"; // Hide progress bar after upload
+      progressContainer.style.display = "none"; 
     };
 
 
