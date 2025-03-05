@@ -48,22 +48,36 @@
             <td class="cell">{{ file.file_extension.upper() }}</td>
             <td class="cell">
               {% if file.firstname and file.lastname %}
-                {{ file.firstname }} {% if file.middlename %}{{ file.middlename }}{% endif %} {{ file.lastname }}
+              {{ file.firstname }} {% if file.middlename %}{{ file.middlename }}{% endif %} {{ file.lastname }}
               {% else %}
-                Unknown
+              Unknown
               {% endif %}
             </td>
             <td class="cell">{{ file.uploaded_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
-            
+
             <td class="cell">
-              <button class="btn btn-primary btn-sm text-white" onclick="handleFile('{{ file.filename }}', '{{ file.file_extension }}')">
-                <i class="fas fa-print text-white"></i> Print / Download
-            </button>
-              <button class="btn btn-danger btn-sm delete-file text-white" data-file-id="{{ file.id }}">
-                <i class="fas fa-trash-alt text-white"></i> Delete
-              </button>
+              <div class="dropdown d-flex justify-content-center">
+                <button class="btn btn-secondary btn-custom btn-sm dropdown-toggle" type="button"
+                  id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fa-solid fa-ellipsis-vertical"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                  <div class="dropdown-item">
+                    <div class="d-flex align-items-center gap-3">
+                      <button class="btn btn-primary btn-sm text-white"
+                        onclick="handleFile('{{ file.filename }}', '{{ file.file_extension }}')">
+                        <i class="fas fa-print text-white"></i> Print / Download
+                      </button>
+                      <button class="btn btn-danger btn-sm delete-file text-white" data-file-id="{{ file.id }}">
+                        <i class="fas fa-trash-alt text-white"></i> Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
             </td>
-            
+
           </tr>
           {% endfor %}
         </tbody>
@@ -73,29 +87,37 @@
   </div>
   <script>
     function handleFile(filename, fileExt) {
-        let fileUrl = '{{ url_for("static", filename="upload/") }}' + filename;
-    
-        if (fileExt.toLowerCase() === 'pdf') {
-            // Open and print PDFs
-            let printWindow = window.open(fileUrl, '_blank');
-            if (printWindow) {
-                printWindow.onload = function () {
-                    printWindow.print();
-                };
-            } else {
-                alert("Please allow pop-ups to print the file.");
-            }
+      let fileUrl = '{{ url_for("static", filename="upload/") }}' + filename;
+
+      if (fileExt.toLowerCase() === 'pdf') {
+        // Open and print PDFs
+        let printWindow = window.open(fileUrl, '_blank');
+        if (printWindow) {
+          printWindow.onload = function () {
+            printWindow.print();
+          };
         } else {
-            // Download DOCX/XLSX instead
-            let downloadLink = document.createElement("a");
-            downloadLink.href = fileUrl;
-            downloadLink.download = filename;
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
+          alert("Please allow pop-ups to print the file.");
         }
+      } else {
+        // Download DOCX/XLSX instead
+        let downloadLink = document.createElement("a");
+        downloadLink.href = fileUrl;
+        downloadLink.download = filename;
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+      }
     }
-    </script>
-    
+  </script>
+  <style>
+    .dropdown-toggle::after {
+      display: none !important;
+    }
+  
+    .dropdown-toggle i {
+      font-weight: bold !important;
+    }
+  </style>
   {% endblock %}
 </div>
