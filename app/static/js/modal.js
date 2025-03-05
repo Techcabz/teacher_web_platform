@@ -196,9 +196,22 @@ if (uploadForm) {
     const form = document.getElementById("uploadForm");
     const authError = form.querySelector("#docs_fileError");
     const input = form.querySelector("#docs_file");
+    const progressContainer = document.querySelector("#progressContainer");
+    const progressBar = document.querySelector("#uploadProgress");
+
+    // Reset progress bar
+    progressBar.style.width = "0%";
+    progressBar.textContent = "0%";
+    progressContainer.style.display = "block";
 
     if (!authError) {
       console.error("Error: error element not found!");
+      return;
+    }
+
+    if (!input.files.length) {
+      showErrorMessage(authError, input, "Input is required.");
+      progressContainer.style.display = "none";
       return;
     }
 
@@ -214,15 +227,21 @@ if (uploadForm) {
       hideErrorMessage(authError, input);
     }
 
-    try {
-      const response = await fetch("/admin/upload", {
-        method: "POST",
-        body: formData,
-      });
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "/admin/upload", true);
 
-      const data = await response.json();
+    // Track upload progress
+    xhr.upload.addEventListener("progress", (event) => {
+      if (event.lengthComputable) {
+        const percent = Math.round((event.loaded / event.total) * 100);
+        progressBar.style.width = percent + "%";
+        progressBar.textContent = percent + "%";
+      }
+    });
 
-      if (response.ok) {
+    xhr.onload = function () {
+      const data = JSON.parse(xhr.responseText);
+      if (xhr.status === 200) {
         alert("success", "top", data.message);
         setTimeout(() => {
           window.location.href = "/user/docs";
@@ -231,12 +250,42 @@ if (uploadForm) {
         showErrorMessage(authError, input, data.message);
         alert("warning", "top", data.message);
       }
-    } catch (error) {
-      console.error("Error:", error);
-      alert("error", "top", "An unexpected error occurred.");
-    } finally {
       setLoadingState(button, false);
-    }
+      progressContainer.style.display = "none"; // Hide progress bar after upload
+    };
+
+
+    xhr.onerror = function () {
+      alert("error", "top", "An unexpected error occurred.");
+      setLoadingState(button, false);
+      progressContainer.style.display = "none";
+    };
+
+    // Send the file
+    xhr.send(formData);
+    // try {
+    //   const response = await fetch("/admin/upload", {
+    //     method: "POST",
+    //     body: formData,
+    //   });
+
+    //   const data = await response.json();
+
+    //   if (response.ok) {
+    //     alert("success", "top", data.message);
+    //     setTimeout(() => {
+    //       window.location.href = "/user/docs";
+    //     }, 2000);
+    //   } else {
+    //     showErrorMessage(authError, input, data.message);
+    //     alert("warning", "top", data.message);
+    //   }
+    // } catch (error) {
+    //   console.error("Error:", error);
+    //   alert("error", "top", "An unexpected error occurred.");
+    // } finally {
+    //   setLoadingState(button, false);
+    // }
   });
 }
 
@@ -268,93 +317,93 @@ document.addEventListener("DOMContentLoaded", function () {
             "Content-Type": "application/json"
           }
         })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            alert("success", "top", data.message);
-       
-            location.reload();
-          } else {
-            alert("warning", "top", data.message);
-          }
-        })
-        .catch(error => {
-          console.error("Error:", error);
-        });
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              alert("success", "top", data.message);
+
+              location.reload();
+            } else {
+              alert("warning", "top", data.message);
+            }
+          })
+          .catch(error => {
+            console.error("Error:", error);
+          });
       }
     });
   });
 
-  
-document.addEventListener("click", function (event) {
 
-  if (event.target.classList.contains("bUserA")) {
-    let userID = event.target.getAttribute("data-user-id");
+  document.addEventListener("click", function (event) {
 
-    showConfirmationDialog(
-      "Are you sure you want to approved this user?",
-      "Yes",
-      "No",
-      async () => {
-        try {
-          const response = await fetch(`/admin/users/approved/${userID}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ status: 1 }),
-          });
+    if (event.target.classList.contains("bUserA")) {
+      let userID = event.target.getAttribute("data-user-id");
 
-          const data = await response.json();
+      showConfirmationDialog(
+        "Are you sure you want to approved this user?",
+        "Yes",
+        "No",
+        async () => {
+          try {
+            const response = await fetch(`/admin/users/approved/${userID}`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ status: 1 }),
+            });
 
-          if (!response.ok) {
-            throw new Error(data.message);
+            const data = await response.json();
+
+            if (!response.ok) {
+              throw new Error(data.message);
+            }
+
+            alert("success", "top", data.message);
+            window.location.reload();
+          } catch (error) {
+            console.error("Error:", error);
+            alert("error", "top", error.message);
           }
+        },
+        () => {
 
-          alert("success", "top", data.message);
-          window.location.reload();
-        } catch (error) {
-          console.error("Error:", error);
-          alert("error", "top", error.message);
         }
-      },
-      () => {
+      );
+    }
 
-      }
-    );
-  }
+    if (event.target.classList.contains("bUserD")) {
+      let userID = event.target.getAttribute("data-user-id");
 
-  if (event.target.classList.contains("bUserD")) {
-    let userID = event.target.getAttribute("data-user-id");
+      showConfirmationDialog(
+        "Are you sure you want to disapprove this user? This will delete the user from our records. Do you want to continue?",
+        "Yes",
+        "No",
+        async () => {
+          try {
+            const response = await fetch(`/admin/users/disapproved/${userID}`, {
+              method: "DELETE",
+              headers: { "Content-Type": "application/json" }
+            });
 
-    showConfirmationDialog(
-      "Are you sure you want to disapprove this user? This will delete the user from our records. Do you want to continue?",
-      "Yes",
-      "No",
-      async () => {
-        try {
-          const response = await fetch(`/admin/users/disapproved/${userID}`, {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" }
-          });
+            const data = await response.json();
 
-          const data = await response.json();
+            if (!response.ok) {
+              throw new Error(data.message);
+            }
 
-          if (!response.ok) {
-            throw new Error(data.message);
+            alert("success", "top", data.message);
+            window.location.reload();
+          } catch (error) {
+            console.error("Error:", error);
+            alert("error", "top", error.message);
           }
+        },
+        () => {
 
-          alert("success", "top", data.message);
-          window.location.reload();
-        } catch (error) {
-          console.error("Error:", error);
-          alert("error", "top", error.message);
         }
-      },
-      () => {
+      );
+    }
 
-      }
-    );
-  }
-
-});
+  });
 });
 
