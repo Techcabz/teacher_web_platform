@@ -45,14 +45,15 @@ def user_disapproved(request,users_id=None):
     return jsonify({'success': False, 'message': 'Create method must be DELETE.'}), 405
 
 def dashboard_report():
-    users = user_services.get()
-    pending_count = sum(1 for user in users if user.status == 0)
-    total_count = len(users)
-
-    # Fetch categories
+     # Fetch categories
     categories = category_services.get()
     files = file_services.get()  
+    users = user_services.get()
 
+    pending_count = sum(1 for user in users if user.status == 0)
+    total_count = len(users)
+    total_file = len(files)
+   
     
     file_data = {category.name: 0 for category in categories}  
 
@@ -64,6 +65,7 @@ def dashboard_report():
     return render_template(
         'admin/dashboard.html',
         total_count=total_count,
+        total_file=total_file,
         pendingCount=pending_count,
         file_data=file_data  
     )
