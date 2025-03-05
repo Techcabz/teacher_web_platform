@@ -1,0 +1,84 @@
+{% extends "admin/template/admin_layout.html" %} {% block wrapper_content %}
+
+<div class="app-content pt-3 p-md-3 p-lg-4">
+  <div class="container-xl">
+    <div class="row g-3 mb-4 align-items-center justify-content-between">
+      <div class="col-auto">
+        <h1 class="app-page-title mb-0">
+          {{ request.endpoint.split('.')[-1] | upper }}
+        </h1>
+      </div>
+
+      <div class="col-auto">
+        <button class="btn app-btn-primary theme-btn" data-bs-toggle="modal" data-bs-target="#pendingUser">
+          (<strong>{{ pendingCount }}</strong>) <i class="fa-solid fa-user-pen"></i>&nbsp;PENDING {{
+            request.endpoint.split('.')[-1] | upper }} 
+        </button>
+      </div>
+    </div>
+
+    <div class="table-responsived p-3">
+      <table id="datatable1" class="table app-table-hover mb-0 text-left">
+        <thead >
+          <tr>
+            <th style="width: 50px">#</th>
+            <th>Username</th>
+            <th>Fullname</th>
+            <th>Email</th>
+            <th>Status</th>
+           
+            <th style="width: 160px">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %} {% if user.role == 'teacher' %} {% if user.status in [1, 2] %}.
+          <tr>
+            <td class="cell">{{ loop.index }}</td>
+            <td>{{ user.username.capitalize() }}</td>
+            <td>{{ user.fullname.capitalize() }}</td>
+            <td>{{ user.email }}</td>
+            <td><span
+              class="badge {% if user.status == 0 %}bg-warning {% elif user.status == 1 %}bg-success {% elif user.status == 2 %}bg-danger{% endif %}"
+            >
+            {% if user.status == 0 %}PENDING {% elif user.status == 1 %} APPROVED {% elif user.status == 2 %} REJECT {% endif %}
+            </span></td>
+            <td>
+              <div class="dropdown d-flex justify-content-center">
+                <button class="btn btn-secondary btn-custom btn-sm dropdown-toggle" type="button"
+                  id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fa-solid fa-ellipsis-vertical"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                  <div class="dropdown-item">
+                    <div class="d-flex align-items-center gap-3">
+                      <a href="javascript:void(0);" class="btn btn-sm btn-warning edit-category"
+                        data-id="{{ user.id }}" data-name="{{ user.name }}">
+                        <i class="fa fa-pencil fa-sm text-white"></i>
+                      </a>
+                      <button type="button" data-id="{{ user.id }}" class="btn btn-sm btn-danger delete-category">
+                        <i class="fa fa-trash fa-sm text-white"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr> {% endif %}  
+          {% endif %} {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <style>
+    .dropdown-toggle::after {
+      display: none !important;
+    }
+  
+    .dropdown-toggle i {
+      font-weight: bold !important;
+    }
+  </style>
+  {% endblock %}
+</div>
+

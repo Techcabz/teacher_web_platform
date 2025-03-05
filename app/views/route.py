@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, request,send_fr
 from flask_login import  current_user
 from app.controllers.auth_controller import login_user_controller,logout_user_controller,register_user_controller
 from app.controllers.users_controller import upload_file,delete_file,docs_list
+from app.controllers.admin_controller import cusers,user_approved,user_disapproved
 from app.models.user_models import User
 from app.models.category_models import Category
 from app.models.file_models import File
@@ -88,6 +89,22 @@ def management():
 @admin.route("/upload", methods=["POST"])
 def upload_files():
     return upload_file(request)
+
+@admin.route('/users', methods=['GET'])
+@admin.route('/users/<int:users_id>', methods=['GET', 'PUT', 'DELETE'])
+@web_guard
+def users(users_id=None):
+    return cusers(request,users_id)
+
+@admin.route('/users/approved/<int:users_id>', methods=['GET', 'PUT', 'DELETE'])
+@web_guard
+def users_approved(users_id=None):
+    return user_approved(request,users_id)
+
+@admin.route('/users/disapproved/<int:users_id>', methods=['GET', 'PUT', 'DELETE'])
+@web_guard
+def user_disapproveds(users_id=None):
+    return user_disapproved(request,users_id)
 
 
 # USER DASHBOARD

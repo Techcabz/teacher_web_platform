@@ -24,7 +24,6 @@
                         <th class="cell">File Name</th>
                         <th class="cell">File Size</th>
                         <th class="cell">File Extension</th>
-                        <th class="cell">Uploader</th>
                         <th class="cell">Date</th>
 
                         <th class="cell"></th>
@@ -47,14 +46,7 @@
                                 (file.file_size / 1024) | round(2) }} KB {% else %} {{ (file.file_size / 1048576) |
                                 round(2) }} MB {% endif %} </td>
                         <td class="cell">{{ file.file_extension.upper() }}</td>
-                        <td class="cell">
-                            {% if file.firstname and file.lastname %}
-                            {{ file.firstname }} {% if file.middlename %}{{ file.middlename }}{% endif %} {{
-                            file.lastname }}
-                            {% else %}
-                            Unknown
-                            {% endif %}
-                        </td>
+                        
                         <td class="cell">{{ file.uploaded_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
 
                         <td class="cell">

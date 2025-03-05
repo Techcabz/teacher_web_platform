@@ -285,4 +285,76 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+  
+document.addEventListener("click", function (event) {
+
+  if (event.target.classList.contains("bUserA")) {
+    let userID = event.target.getAttribute("data-user-id");
+
+    showConfirmationDialog(
+      "Are you sure you want to approved this user?",
+      "Yes",
+      "No",
+      async () => {
+        try {
+          const response = await fetch(`/admin/users/approved/${userID}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: 1 }),
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(data.message);
+          }
+
+          alert("success", "top", data.message);
+          window.location.reload();
+        } catch (error) {
+          console.error("Error:", error);
+          alert("error", "top", error.message);
+        }
+      },
+      () => {
+
+      }
+    );
+  }
+
+  if (event.target.classList.contains("bUserD")) {
+    let userID = event.target.getAttribute("data-user-id");
+
+    showConfirmationDialog(
+      "Are you sure you want to disapprove this user? This will delete the user from our records. Do you want to continue?",
+      "Yes",
+      "No",
+      async () => {
+        try {
+          const response = await fetch(`/admin/users/disapproved/${userID}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" }
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(data.message);
+          }
+
+          alert("success", "top", data.message);
+          window.location.reload();
+        } catch (error) {
+          console.error("Error:", error);
+          alert("error", "top", error.message);
+        }
+      },
+      () => {
+
+      }
+    );
+  }
+
 });
+});
+

@@ -1,0 +1,56 @@
+<div class="card ">
+    <div class="card-body p-3">
+      <h4 class="card-title">
+        <div class="d-flex justify-content-between align-items-center">
+          <h5 class="m-0 font-weight-bold text-primary">
+            ADMINISTRATOR LIST
+          </h5>
+          <button type="button" class="btn bg-gradient-success">
+            <i class="fa fa-plus-square"></i>&nbsp;Add new Admin
+          </button>
+        </div>
+      </h4>
+      <div class="table-responsived">
+        <table id="datatable" class="table table-borderless w-100">
+          <thead class="bg-gradient-success text-white">
+            <tr>
+              <th style="width: 50px">#</th>
+              <th>Username</th>
+              <th>Roles</th>
+              <th style="width: 160px">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for user in users %} {% if user.role == 'admin' %}
+            <tr>
+              <td class="cell">{{ loop.index }}</td>
+              <td>{{ user.username.capitalize() }}</td>
+              <td>{{ user.role.capitalize() }}</td>
+             <td>
+                <div class="dropdown d-flex justify-content-center">
+                  <button class="btn btn-secondary btn-custom btn-sm dropdown-toggle" type="button"
+                    id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <div class="dropdown-item">
+                      <div class="d-flex align-items-center gap-3">
+                        <a href="javascript:void(0);" class="btn btn-sm btn-warning edit-category"
+                          data-id="{{ user.id }}" data-name="{{ user.name }}">
+                          <i class="fa fa-pencil-square-o"></i>
+                        </a>
+                        <button type="button" data-id="{{ user.id }}" class="btn btn-sm btn-danger delete-category">
+                          <i class="fa fa-trash-o"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            {% endif %} {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>

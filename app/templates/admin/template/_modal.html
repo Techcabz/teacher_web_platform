@@ -125,6 +125,52 @@
   </div>
 </div>
 
+<!-- user table pending -->
+<div class="modal fade" id="pendingUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="profileModalLabel">
+          PENDING {{ request.endpoint.split('.')[-1] | upper }}
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsived p-3">
+          <table id="datatable2" class="table app-table-hover mb-0 text-left w-100">
+            <thead>
+              <tr>
+                <th style="width: 50px">#</th>
+                <th>Username</th>
+                <th>Fullname</th>
+                <th>Address</th>
+                <th style="width: 160px">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for user in users %} {% if user.status == 0 %}
+              <tr>
+                <td class="cell">{{ loop.index }}</td>
+                <td>{{ user.username.capitalize() }}</td>
+                <td>{{ user.fullname.capitalize() }}</td>
+                <td> <span tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus"  data-bs-placement="bottom"
+                    data-bs-content=" {{ user.address }}" class="d-inline-block text-truncate"
+                    style="width: 150px;"> {{ user.email }}</span></td>
+                <td>
+                  <div class="d-flex justify-content-center align-items-center gap-2 mt-1">
+                    <span class="badge bg-success custom-cursor bUserA" data-user-id="{{ user.id }}">APPROVED</span>
+                    <span class="badge bg-danger custom-cursor bUserD" data-user-id="{{ user.id }}">DISAPPROVED</span>
+                  </div>
+                </td>
+              </tr>
+              {% endif %} {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
   function addKeyword() {

@@ -86,8 +86,11 @@ def upload_file(request):
     if file.filename == "" or not allowed_file(file.filename):
         return jsonify({'error': True, 'message': 'Invalid file'}), 400
 
-    file_ext = file.filename.rsplit(".", 1)[1].lower()
-    
+   # Extract filename and extension
+    filename_with_ext = secure_filename(file.filename)
+    filename, file_ext = os.path.splitext(filename_with_ext)  # Splits "file.pdf" -> ("file", ".pdf")
+    file_ext = file_ext.lower().lstrip(".")  # Remove the leading dot from extension
+
     content = ""
     if file_ext == "pdf":
         content = extract_text_from_pdf(file)
@@ -108,8 +111,7 @@ def upload_file(request):
     if not category:
         return jsonify({'error': True, 'message': 'Category not found in database.'}), 400
 
-    filename = secure_filename(file.filename)
-
+    
     existing_file = file_service.get_one(filename=filename, category_id=category.id)
     if existing_file:
         return jsonify({
