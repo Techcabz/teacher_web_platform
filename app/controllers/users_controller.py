@@ -2,6 +2,7 @@ import os
 import re
 import fitz  
 import openpyxl  
+from pptx import Presentation
 from io import BytesIO
 from flask import current_app, request, jsonify,render_template,redirect,url_for
 from werkzeug.utils import secure_filename
@@ -12,7 +13,8 @@ from app.models.file_models import File
 from flask_login import current_user
 from app.services.services import CRUDService
 
-ALLOWED_EXTENSIONS = {"txt", "csv", "pdf", "docx", "xlsx"}
+ALLOWED_EXTENSIONS = {"txt", "csv", "pdf", "docx", "xlsx", "pptx"}
+
 
 file_service = CRUDService(File)
 categories_service = CRUDService(Category)
@@ -53,6 +55,16 @@ def extract_text_from_pdf(file):
         return ""
 
     return text.strip()
+
+def extract_text_from_pptx(file):
+    """Extract text from a PPTX file."""
+    text = []
+    ppt = Presentation(file)
+    for slide in ppt.slides:
+        for shape in slide.shapes:
+            if hasattr(shape, "text"):
+                text.append(shape.text)
+    return "\n".join(text).strip()
 
 def get_categories_from_db():
     categories = {}
@@ -100,8 +112,11 @@ def upload_file(request):
         content = extract_text_from_docx(file)
     elif file_ext == "xlsx":
         content = extract_text_from_xlsx(file)
-    else:  
+    elif file_ext == "pptx":
+        content = extract_text_from_pptx(file) 
+    else:
         content = file.read().decode("utf-8")
+
 
     # Categorize content
     category_name = categorize_content(content)

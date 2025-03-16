@@ -15,9 +15,17 @@
               <div>
                 <label for="docs_file" class="block text-sm font-medium text-gray-700">Documents</label>
                 <input type="file" id="docs_file" name="docs_file" class="form-control"
-                  accept=".pdf,.docx,.txt,.csv,.xlsx" required />
-                <small class="text-muted">Accepted file types: PDF, DOCX, TXT, CSV, XLSX</small>
-
+                accept=".pdf,.docx,.txt,.csv,.xlsx,.pptx" required />
+                <small class="text-muted">
+                  Accepted file types:
+                  <i class="fas fa-file-pdf text-danger"></i> PDF,  
+                  <i class="fas fa-file-word text-primary"></i> DOCX,  
+                  <i class="fas fa-file-alt text-secondary"></i> TXT,  
+                  <i class="fas fa-file-csv text-success"></i> CSV,  
+                  <i class="fas fa-file-excel text-success"></i> XLSX,  
+                  <i class="fas fa-file-powerpoint text-warning"></i> PPTX
+                </small>
+                
                 <div id="docs_fileError" class="error-text text-danger"></div>
                 <!-- Progress Bar -->
                 <div class="progress mt-3" style="display: none;" id="progressContainer">
