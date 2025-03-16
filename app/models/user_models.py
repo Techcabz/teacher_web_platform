@@ -25,7 +25,10 @@ class User(UserMixin, db.Model):
 
     @property
     def fullname(self):
-        return f"{self.firstname} {self.middlename} {self.lastname}".strip()
+        parts = [self.firstname, self.lastname] 
+        if self.middlename:  
+            parts.insert(1, self.middlename)  
+        return " ".join(parts).strip()
 
     def __repr__(self):
         return f"<User {self.id}: {self.firstname} {self.middlename or ''} {self.lastname} - Status: {self.status}>"

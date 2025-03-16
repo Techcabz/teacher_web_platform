@@ -27,6 +27,10 @@ class UserService:
         return User.query.filter_by(username=username).first()
 
     @staticmethod
+    def get_user_by_email(email):
+        return User.query.filter_by(email=email).first()
+
+    @staticmethod
     def update_user(user_id, new_password=None, new_role=None, **kwargs):
         user = User.query.get(user_id)
         if user:

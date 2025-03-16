@@ -78,6 +78,8 @@ def categorize_content(content):
     return "Uncategorized"
 
 def upload_file(request):
+    uploader_id = current_user.id if current_user.is_authenticated else None
+
     if "docs_file" not in request.files:
         return jsonify({'error': True, 'message': 'No file part'}), 400
 
@@ -88,8 +90,8 @@ def upload_file(request):
 
    # Extract filename and extension
     filename_with_ext = secure_filename(file.filename)
-    filename, file_ext = os.path.splitext(filename_with_ext)  # Splits "file.pdf" -> ("file", ".pdf")
-    file_ext = file_ext.lower().lstrip(".")  # Remove the leading dot from extension
+    filename, file_ext = os.path.splitext(filename_with_ext) 
+    file_ext = file_ext.lower().lstrip(".")  
 
     content = ""
     if file_ext == "pdf":
@@ -112,11 +114,13 @@ def upload_file(request):
         return jsonify({'error': True, 'message': 'Category not found in database.'}), 400
 
     
-    existing_file = file_service.get_one(filename=filename, category_id=category.id)
+    existing_file = file_service.get_one(
+        filename=filename, category_id=category.id, uploader_id=uploader_id
+    )
     if existing_file:
         return jsonify({
             'error': True,
-            'message': f'File "{filename}" already exists under the "{category_name}" category!'
+            'message': f'You have already uploaded a file named "{filename}" under the "{category_name}" category!'
         }), 400
 
     upload_folder = os.path.join(current_app.root_path, "static", "upload")
@@ -190,6 +194,7 @@ def dashboard_report_users():
         if file.category_id in [category.id for category in categories]:
             category_name = next(cat.name for cat in categories if cat.id == file.category_id)
             file_data[category_name] += 1
+            
     print(file_data)
     return render_template(
         'users/dashboard.html',

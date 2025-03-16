@@ -5,24 +5,21 @@ from app.services.user_services import UserService
 from app.utils.validation_utils import Validation
 from app.extensions import db
 
-
 def login_user_controller(request):
     if request.method == 'GET':
         return render_template('auth/login.html')
 
     elif request.method == 'POST':
-        username = request.form.get('username', '').strip().lower()
+        identifier = request.form.get('username', '').strip().lower() 
         password = request.form.get('password', '')
 
-        # Check for empty fields
-        if not username or not password:
-            return jsonify({'success': False, 'message': 'Username and password are required.'}), 400
+        if not identifier or not password:
+            return jsonify({'success': False, 'message': 'Username/Email and password are required.'}), 400
 
-        user = UserService.get_user_by_username(username)
+        user = UserService.get_user_by_username(identifier) or UserService.get_user_by_email(identifier)
 
-        # Check if user exists and password is correct
         if user and user.check_password(password):
-            if user.status == 0:  # User is pending
+            if user.status == 0: 
                 return jsonify({'success': False, 'message': 'Your account is pending approval. Please wait for admin approval.'}), 403
 
             login_user(user)
@@ -30,14 +27,12 @@ def login_user_controller(request):
             session['user_id'] = user.id
             session['username'] = user.username
             session['fullname'] = user.fullname
-            session.permanent = True  # Set session expiration
-
+            session.permanent = True  
             return jsonify({'success': True, 'message': 'Login successful! Redirecting...'}), 200
         else:
-            return jsonify({'success': False, 'message': 'Invalid username or password.'}), 400
+            return jsonify({'success': False, 'message': 'Invalid username/email or password.'}), 400
 
     return jsonify({'success': False, 'message': 'Invalid request method.'}), 405
-
 
 def register_user_controller(request):
     if request.method == 'GET':
@@ -75,6 +70,9 @@ def register_user_controller(request):
         # Check if username already exists
         if UserService.get_user_by_username(username):
             return jsonify({'success': False, 'message': 'Username is already taken.'}), 400
+
+        if UserService.get_user_by_email(email):
+            return jsonify({'success': False, 'message': 'Email is already registered.'}), 400
 
         # Create new user
         new_user = UserService.create_user(

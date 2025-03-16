@@ -54,54 +54,65 @@
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const fileData = {{ file_data | tojson }};  
-    
       const labels = Object.keys(fileData);  
       const dataValues = Object.values(fileData); 
-    
       const ctx = document.getElementById('fileCategoryChart').getContext('2d');
-      
-      new Chart(ctx, {
-        type: 'pie',
-        data: {
-          labels: labels,
-          datasets: [{
-            data: dataValues,
-            backgroundColor: [
-              'rgba(255, 99, 132, 0.5)',
-              'rgba(54, 162, 235, 0.5)',
-              'rgba(255, 206, 86, 0.5)',
-              'rgba(75, 192, 192, 0.5)',
-              'rgba(153, 102, 255, 0.5)',
-            ],
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'bottom',
-            },
-            tooltip: {
-              callbacks: {
-                label: function (tooltipItem) {
-                  return ` ${tooltipItem.raw} files`;
-                }
-              }
-            },
-            datalabels: {
-              color: '#fff',
-              font: {
-                size: 14,
-                weight: 'bold'
+  
+      // Check if all values are zero
+      const allZero = dataValues.every(value => value === 0);
+  
+      if (labels.length === 0 || allZero) {
+        // If no data or all values are zero, display message
+        ctx.font = "16px Arial";
+        ctx.fillStyle = "#666";
+        ctx.textAlign = "center";
+        ctx.fillText("No data available", ctx.canvas.width / 2, ctx.canvas.height / 2);
+      } else {
+        // Render the chart
+        new Chart(ctx, {
+          type: 'pie',
+          data: {
+            labels: labels,
+            datasets: [{
+              data: dataValues,
+              backgroundColor: [
+                'rgba(255, 99, 132, 0.5)',
+                'rgba(54, 162, 235, 0.5)',
+                'rgba(255, 206, 86, 0.5)',
+                'rgba(75, 192, 192, 0.5)',
+                'rgba(153, 102, 255, 0.5)',
+              ],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: 'bottom',
               },
-              formatter: (value) => value, 
+              tooltip: {
+                callbacks: {
+                  label: function (tooltipItem) {
+                    return ` ${tooltipItem.raw} files`;
+                  }
+                }
+              },
+              datalabels: {
+                color: '#fff',
+                font: {
+                  size: 14,
+                  weight: 'bold'
+                },
+                formatter: (value) => value, 
+              }
             }
-          }
-        },
-        plugins: [ChartDataLabels] 
-      });
+          },
+          plugins: [ChartDataLabels] 
+        });
+      }
     });
-    </script>
+  </script>
+  
   {% endblock %}
 </div>
