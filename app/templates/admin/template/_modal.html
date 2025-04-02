@@ -1,11 +1,22 @@
-<div class="modal fade" id="addCategory" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="addCategory"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="profileModalLabel">
           {{ request.endpoint.split('.')[-1] | upper }}
         </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body">
         <div class="card">
@@ -13,31 +24,59 @@
             <form id="categoryForm" method="post">
               <!-- Category Name -->
               <div>
-                <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-                <input type="text" id="ciname" name="ciname" class="form-control" required />
+                <label
+                  for="name"
+                  class="block text-sm font-medium text-gray-700"
+                  >Name</label
+                >
+                <input
+                  type="text"
+                  id="ciname"
+                  name="ciname"
+                  class="form-control"
+                  required
+                />
                 <div id="cinameError" class="error-text"></div>
               </div>
 
               <!-- Dynamic Keyword Inputs -->
               <div class="mt-3">
-                <label class="block text-sm font-medium text-gray-700">Keywords</label>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Keywords</label
+                >
                 <div id="keywordsContainer">
                   <div class="d-flex mb-2">
-                    <input type="text" name="keywords[]" class="form-control keyword-input"
-                      placeholder="Enter keyword" />
-                    <button type="button" class="btn btn-danger ms-2 remove-keyword" onclick="removeKeyword(this)"
-                      style="display: none;">
+                    <input
+                      type="text"
+                      name="keywords[]"
+                      class="form-control keyword-input"
+                      placeholder="Enter keyword"
+                    />
+                    <button
+                      type="button"
+                      class="btn btn-danger ms-2 remove-keyword"
+                      onclick="removeKeyword(this)"
+                      style="display: none"
+                    >
                       <i class="fa fa-trash fa-sm text-white"></i>
                     </button>
                   </div>
                 </div>
-                <button type="button" class="btn btn-secondary mt-2" onclick="addKeyword()">
+                <button
+                  type="button"
+                  class="btn btn-secondary mt-2"
+                  onclick="addKeyword()"
+                >
                   + Add Keyword
                 </button>
               </div>
 
-              <button type="submit" id="categoryButton" data-loading-text="Submitting..."
-                class="btn app-btn-primary theme-btn w-100 mt-4 mb-0">
+              <button
+                type="submit"
+                id="categoryButton"
+                data-loading-text="Submitting..."
+                class="btn app-btn-primary theme-btn w-100 mt-4 mb-0"
+              >
                 Submit
               </button>
             </form>
@@ -48,14 +87,25 @@
   </div>
 </div>
 
-<div class="modal fade" id="updateCategory" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="updateCategory"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="profileModalLabel">
           {{ request.endpoint.split('.')[-1] | upper }}
         </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body">
         <div class="card">
@@ -63,16 +113,32 @@
             <form id="categoryFormUpdate">
               <!-- Category Name -->
               <div>
-                <label for="ciname" class="block text-sm font-medium text-gray-700">Name</label>
-                <input type="text" id="ciname" name="ciname" class="form-control" required />
+                <label
+                  for="ciname"
+                  class="block text-sm font-medium text-gray-700"
+                  >Name</label
+                >
+                <input
+                  type="text"
+                  id="ciname"
+                  name="ciname"
+                  class="form-control"
+                  required
+                />
                 <div id="cinameError" class="error-text"></div>
               </div>
 
               <!-- Keywords (Dynamic Fields) -->
               <div class="mt-3">
-                <label class="block text-sm font-medium text-gray-700">Keywords</label>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Keywords</label
+                >
                 <div id="keywordsContainerUpdate"></div>
-                <button type="button" class="btn btn-secondary mt-2" onclick="addKeywordUpdate()">
+                <button
+                  type="button"
+                  class="btn btn-secondary mt-2"
+                  onclick="addKeywordUpdate()"
+                >
                   + Add Keyword
                 </button>
               </div>
@@ -80,8 +146,12 @@
               <!-- Hidden ID Input -->
               <input type="hidden" id="cid" name="cid" />
 
-              <button type="submit" id="categoryButtonUpdate" data-loading-text="Submitting..."
-                class="btn app-btn-primary theme-btn w-100 mt-4 mb-0">
+              <button
+                type="submit"
+                id="categoryButtonUpdate"
+                data-loading-text="Submitting..."
+                class="btn app-btn-primary theme-btn w-100 mt-4 mb-0"
+              >
                 Submit
               </button>
             </form>
@@ -92,14 +162,25 @@
   </div>
 </div>
 
-<div class="modal fade" id="addUpload" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="addUpload"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="profileModalLabel">
           {{ request.endpoint.split('.')[-1] | upper }}
         </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body">
         <div class="card">
@@ -107,14 +188,31 @@
             <form id="uploadForm" method="post" enctype="multipart/form-data">
               <!-- File Upload -->
               <div>
-                <label for="docs_file" class="block text-sm font-medium text-gray-700">Documents</label>
-                <input type="file" id="docs_file" name="docs_file" class="form-control" accept=".pdf,.docx,.txt,.csv,.xlsx" required />
-                <small class="text-muted">Accepted file types: PDF, DOCX, TXT, CSV, XLSX</small>
+                <label
+                  for="docs_file"
+                  class="block text-sm font-medium text-gray-700"
+                  >Documents</label
+                >
+                <input
+                  type="file"
+                  id="docs_file"
+                  name="docs_file"
+                  class="form-control"
+                  accept=".pdf,.docx,.txt,.csv,.xlsx"
+                  required
+                />
+                <small class="text-muted"
+                  >Accepted file types: PDF, DOCX, TXT, CSV, XLSX</small
+                >
 
                 <div id="docs_fileError" class="error-text text-danger"></div>
               </div>
 
-              <button type="submit" id="uploadButton" class="btn app-btn-primary theme-btn w-100 mt-4 mb-0">
+              <button
+                type="submit"
+                id="uploadButton"
+                class="btn app-btn-primary theme-btn w-100 mt-4 mb-0"
+              >
                 Upload
               </button>
             </form>
@@ -124,20 +222,277 @@
     </div>
   </div>
 </div>
+<!-- admin / user edit -->
+<div
+  class="modal fade"
+  id="profileUserAdminModal"
+  tabindex="-1"
+  aria-labelledby="profileModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">USERS DETAILS</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="card">
+          <div class="card-body p-3">
+            <form id="profileFormUserAdmin">
+              <!-- Username -->
+              <div class="mb-2">
+                <label class="form-label">Username</label>
+                <input
+                  type="text"
+                  id="ausername"
+                  name="ausername"
+                  class="form-control"
+                  required
+                />
+              </div>
+
+              <!-- Full Name -->
+              <div class="row">
+                <div class="col-6">
+                  <div class="mb-2">
+                    <label class="form-label"
+                      >First Name <span style="color: red">*</span></label
+                    >
+                    <input
+                      type="text"
+                      id="afname"
+                      name="afname"
+                      class="form-control"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="mb-2">
+                    <label class="form-label">Middle Name</label>
+                    <input
+                      type="text"
+                      id="amname"
+                      name="amname"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="mb-2">
+                <label class="form-label"
+                  >Last Name <span style="color: red">*</span></label
+                >
+                <input
+                  type="text"
+                  id="alname"
+                  name="alname"
+                  class="form-control"
+                  required
+                />
+              </div>
+
+              <input
+                type="hidden"
+                id="profile_user_id"
+                name="profile_user_id"
+              />
+
+              <!-- Address -->
+              <div class="mb-2">
+                <label class="form-label"
+                  >Email <span style="color: red">*</span></label
+                >
+                <input
+                  type="text"
+                  id="email"
+                  name="email"
+                  class="form-control"
+                  required
+                />
+              </div>
+
+              <hr />
+              <div class="mb-3">
+                <label class="form-label">New Password (optional)</label>
+                <input
+                  type="password"
+                  id="newPassword"
+                  name="newPassword"
+                  class="form-control"
+                  placeholder="Leave blank to keep current password"
+                />
+              </div>
+
+              <!-- Save Button -->
+              <div class="d-grid">
+                <button
+                  type="submit"
+                  class="btn btn-primary text-white"
+                  id="profileButtonUpdate"
+                  data-loading-text="Save Changes..."
+                >
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+          <!-- End Card Body -->
+        </div>
+        <!-- End Card -->
+      </div>
+      <!-- End Modal Body -->
+    </div>
+    <!-- End Modal Content -->
+  </div>
+  <!-- End Modal Dialog -->
+</div>
+<div
+  class="modal fade"
+  id="profileAdminModal"
+  tabindex="-1"
+  aria-labelledby="profileModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">ADMINISTRATOR DETAILS</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="card">
+          <div class="card-body p-3">
+            <form id="profileFormEditAdmin">
+              <!-- Username -->
+              <div class="mb-2">
+                <label class="form-label">Username</label>
+                <input
+                  type="text"
+                  id="adusername"
+                  name="adusername"
+                  class="form-control"
+                  readonly
+                  required
+                />
+              </div>
+
+              <!-- Full Name -->
+              <div class="row">
+                <div class="col-6">
+                  <div class="mb-2">
+                    <label class="form-label"
+                      >First Name <span style="color: red">*</span></label
+                    >
+                    <input
+                      type="text"
+                      id="adfname"
+                      name="adfname"
+                      class="form-control"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="mb-2">
+                    <label class="form-label">Middle Name</label>
+                    <input
+                      type="text"
+                      id="admname"
+                      name="admname"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="mb-2">
+                <label class="form-label"
+                  >Last Name <span style="color: red">*</span></label
+                >
+                <input
+                  type="text"
+                  id="adlname"
+                  name="adlname"
+                  class="form-control"
+                  required
+                />
+              </div>
+
+              <input
+                type="hidden"
+                id="profile_admin_id"
+                name="profile_user_id"
+              />
+
+              
+              <hr />
+              <div class="mb-3">
+                <label class="form-label">New Password (optional)</label>
+                <input
+                  type="password"
+                  id="newPassword"
+                  name="newPassword"
+                  class="form-control"
+                  placeholder="Leave blank to keep current password"
+                />
+              </div>
+
+              <div class="d-grid">
+                <button
+                  type="submit"
+                  class="btn btn-primary text-white"
+                  id="profileButtonUpdate"
+                  data-loading-text="Save Changes..."
+                >
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+   </div>
+</div>
 
 <!-- user table pending -->
-<div class="modal fade" id="pendingUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="pendingUser"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="profileModalLabel">
           PENDING {{ request.endpoint.split('.')[-1] | upper }}
         </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body">
         <div class="table-responsived p-3">
-          <table id="datatable2" class="table app-table-hover mb-0 text-left w-100">
+          <table
+            id="datatable2"
+            class="table app-table-hover mb-0 text-left w-100"
+          >
             <thead>
               <tr>
                 <th style="width: 50px">#</th>
@@ -153,13 +508,33 @@
                 <td class="cell">{{ loop.index }}</td>
                 <td>{{ user.username.capitalize() }}</td>
                 <td>{{ user.fullname.capitalize() }}</td>
-                <td> <span tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus"  data-bs-placement="bottom"
-                    data-bs-content=" {{ user.address }}" class="d-inline-block text-truncate"
-                    style="width: 150px;"> {{ user.email }}</span></td>
                 <td>
-                  <div class="d-flex justify-content-center align-items-center gap-2 mt-1">
-                    <span class="badge bg-success custom-cursor bUserA" data-user-id="{{ user.id }}">APPROVED</span>
-                    <span class="badge bg-danger custom-cursor bUserD" data-user-id="{{ user.id }}">DISAPPROVED</span>
+                  <span
+                    tabindex="0"
+                    data-bs-toggle="popover"
+                    data-bs-trigger="hover focus"
+                    data-bs-placement="bottom"
+                    data-bs-content=" {{ user.address }}"
+                    class="d-inline-block text-truncate"
+                    style="width: 150px"
+                  >
+                    {{ user.email }}</span
+                  >
+                </td>
+                <td>
+                  <div
+                    class="d-flex justify-content-center align-items-center gap-2 mt-1"
+                  >
+                    <span
+                      class="badge bg-success custom-cursor bUserA"
+                      data-user-id="{{ user.id }}"
+                      >APPROVED</span
+                    >
+                    <span
+                      class="badge bg-danger custom-cursor bUserD"
+                      data-user-id="{{ user.id }}"
+                      >DISAPPROVED</span
+                    >
                   </div>
                 </td>
               </tr>
@@ -184,12 +559,11 @@
     `;
 
     container.appendChild(div);
-    
+
     // Show remove button on existing keywords
     let removeButtons = document.querySelectorAll(".remove-keyword");
-    removeButtons.forEach(btn => btn.style.display = "inline-block");
+    removeButtons.forEach((btn) => (btn.style.display = "inline-block"));
   }
-
 
   // Function to add a keyword input dynamically
   function addKeywordUpdate(value = "") {
@@ -203,17 +577,16 @@
   `;
 
     container.appendChild(div);
- 
+
     // Show remove button on existing keywords
     let inputs = document.querySelectorAll(".keyword-inputs");
     let removeButtons = document.querySelectorAll(".remove-keywords");
-    
+
     if (inputs.length === 1) {
       document.querySelector(".remove-keywords").style.display = "none";
-    } else{
-      removeButtons.forEach(btn => btn.style.display = "inline-block");
+    } else {
+      removeButtons.forEach((btn) => (btn.style.display = "inline-block"));
     }
- 
   }
 
   // Function to remove a keyword input
@@ -225,9 +598,7 @@
     if (inputs.length === 1) {
       document.querySelector(".remove-keywords").style.display = "none";
     }
-
   }
-
 
   function removeKeyword(button) {
     button.parentElement.remove();
@@ -243,5 +614,5 @@
 <style>
   .remove-keyboard {
     color: #ffff !important;
-}
+  }
 </style>

@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, request,send_fr
 from flask_login import  current_user
 from app.controllers.auth_controller import login_user_controller,logout_user_controller,register_user_controller
 from app.controllers.users_controller import upload_file,delete_file,docs_list,dashboard_report_users
-from app.controllers.admin_controller import cusers,user_approved,user_disapproved, dashboard_report
+from app.controllers.admin_controller import adminList,update_profile_user,get_profiles_admin, cusers,user_approved,user_disapproved, dashboard_report
 from app.models.user_models import User
 from app.models.category_models import Category
 from app.models.file_models import File
@@ -47,6 +47,16 @@ def logout():
 def dashboard():
     return dashboard_report()
 
+@admin.route('/get_profile_admin/<int:users_id>')
+@web_guard
+def get_profile_admin(users_id=None):
+    return get_profiles_admin(users_id)
+
+@admin.route('/update_profile', methods=['POST'])
+@web_guard
+def update_profile_users():
+    return update_profile_user()
+
 @admin.route('/category',methods=['GET', 'POST'])
 @admin.route('/category/<int:categoryy_id>', methods=['GET', 'PUT', 'DELETE'])
 @web_guard
@@ -84,7 +94,7 @@ def delete_files(file_id=None):
 @admin.route('/management')
 @web_guard
 def management():
-    return render_template('admin/management.html')
+    return adminList(request)
 
 @admin.route("/upload", methods=["POST"])
 def upload_files():

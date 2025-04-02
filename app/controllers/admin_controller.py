@@ -18,6 +18,14 @@ def cusers(request,users_id=None):
         return render_template('admin/users.html', users=users, pendingCount=pending_count)
     return jsonify({'success': False, 'message': 'Create method must be POST.'}), 405
 
+def adminList(request,users_id=None):
+    if request.method == 'GET':
+        users = user_services.get()
+       
+        return render_template('admin/management.html', users=users)
+    return jsonify({'success': False, 'message': 'Create method must be POST.'}), 405
+
+
 def user_approved(request,users_id=None):
     if request.method == 'PUT':
         users = user_services.get_one(id=users_id)
@@ -43,6 +51,58 @@ def user_disapproved(request,users_id=None):
         return jsonify({'success': False, 'message': 'User remove successfully.'}), 200
     
     return jsonify({'success': False, 'message': 'Create method must be DELETE.'}), 405
+
+def get_profiles_admin(users_id):
+    user = user_services.get_one(id=users_id)
+   
+    if not user:
+        return jsonify({"success": False, "message": "User not found"}), 404
+
+    user_data = {
+        "id": user.id,
+        "username": user.username,
+        "firstname": user.firstname,
+        "lastname": user.lastname,
+        "middlename": user.middlename,
+        "email": user.email,
+        "status": user.status,
+      
+        "role": user.role,
+       
+    }
+    return jsonify({"success": True, "user": user_data})
+
+def update_profile_user():
+    data = request.json
+    user_id = data.get("profile_user_id")
+    user = user_services.get_one(id=user_id)
+ 
+    if not user:
+        return jsonify({"success": False, "message": "User not found"}), 404
+
+    # Fields to update
+    update_data = {
+        "firstname": data.get("afname"),
+        "middlename": None if data.get("amname") == "N/A" else data.get("amname"),
+        "lastname": data.get("alname"),
+        "email": data.get("email"),
+    }
+
+    new_password = data.get("newPassword")
+    print(update_data)
+    if new_password:  
+        password_error = Validation.is_valid_password(new_password)
+        if password_error:
+            return jsonify({"success": False, "message": password_error}), 400
+
+        user.set_password(new_password) 
+    updated_user = user_services.update(user_id, **update_data)
+
+    if updated_user:
+        return jsonify({"success": True, "message": "Profile updated successfully"})
+    else:
+        return jsonify({"success": False, "message": "Error updating profile"}), 500
+
 
 def dashboard_report():
      # Fetch categories

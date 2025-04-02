@@ -289,6 +289,153 @@ if (uploadForm) {
   });
 }
 
+
+const profileFormUserAdmin = document.querySelector("#profileFormUserAdmin");
+if (profileFormUserAdmin) {
+  profileFormUserAdmin.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+    const formDataObject = Object.fromEntries(formData.entries());
+    const button = profileFormUserAdmin.querySelector("button.btn-primary");
+
+    setLoadingState(button, true);
+
+    try {
+      const response = await fetch("/admin/update_profile", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formDataObject),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("success", "top", data.message);
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      } else {
+        alert("warning", "top", data.message);
+        setLoadingState(button, false);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("error", "top", "An error occurred while updating your profile.");
+      setLoadingState(button, false);
+    }
+  });
+}
+
+
+const profileFormEditAdmin = document.querySelector("#profileFormEditAdmin");
+if (profileFormEditAdmin) {
+  profileFormEditAdmin.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+    const formDataObject = Object.fromEntries(formData.entries());
+    const button = profileFormEditAdmin.querySelector("button.btn-primary");
+
+    setLoadingState(button, true);
+
+    try {
+      const response = await fetch("/admin/update_profile", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formDataObject),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("success", "top", data.message);
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      } else {
+        alert("warning", "top", data.message);
+        setLoadingState(button, false);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("error", "top", "An error occurred while updating your profile.");
+      setLoadingState(button, false);
+    }
+  });
+}
+
+
+function showUpdateUser(id, name) {
+  
+  fetch(`/admin/get_profile_admin/${id}`)
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        document.getElementById('profile_user_id').value = data.user.id;
+
+        document.getElementById('ausername').value = data.user.username || "N/A";
+        document.getElementById('afname').value = data.user.firstname || "N/A";
+        document.getElementById('amname').value = data.user.middlename || "N/A";
+        document.getElementById('alname').value = data.user.lastname || "N/A";
+        document.getElementById('email').value = data.user.email || "N/A";
+       
+        // let sexSelect = document.getElementById('asex');
+        // if (sexSelect) {
+        //   for (let option of sexSelect.options) {
+        //     if (option.value.toLowerCase() === data.user.sex.toLowerCase()) {
+        //       option.selected = true;
+        //       break;
+        //     }
+        //   }
+        // } else {
+        //   console.error("Element with ID 'asex' not found.");
+        // }
+
+        var updateModal = new bootstrap.Modal(
+          document.getElementById("profileUserAdminModal")
+        );
+        updateModal.show();
+      } else {
+        alert('warning','top','Failed to load profile data.');
+      }
+    })
+    .catch(error => {
+      console.error("Error fetching profile data:", error);
+      alert('warning','top','Error fetching profile data.');
+    });
+}
+function showUpdateAdmin(id, name) {
+  
+  fetch(`/admin/get_profile_admin/${id}`)
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        document.getElementById('profile_admin_id').value = data.user.id;
+
+        document.getElementById('adusername').value = data.user.username || "N/A";
+        document.getElementById('adfname').value = data.user.firstname || "N/A";
+        document.getElementById('admname').value = data.user.middlename || "N/A";
+        document.getElementById('adlname').value = data.user.lastname || "N/A";
+     
+
+        var updateModal = new bootstrap.Modal(
+          document.getElementById("profileAdminModal")
+        );
+        updateModal.show();
+      } else {
+        alert('warning','top','Failed to load profile data.');
+      }
+    })
+    .catch(error => {d
+      console.error("Error fetching profile data:", error);
+      alert('warning','top','Error fetching profile data.');
+    });
+}
 // dom calling
 document.addEventListener("DOMContentLoaded", function () {
   document.querySelectorAll(".edit-category").forEach((button) => {
@@ -306,6 +453,23 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+  document.querySelectorAll(".edit-profile-user").forEach((button) => {
+    button.addEventListener("click", function () {
+      const id = this.dataset.id;
+      const name = this.dataset.name;
+      showUpdateUser(id, name);
+    });
+  });
+
+  document.querySelectorAll(".edit-profile-admin").forEach((button) => {
+    button.addEventListener("click", function () {
+      const id = this.dataset.id;
+      const name = this.dataset.name;
+      showUpdateAdmin(id, name);
+    });
+  });
+
+  
   document.querySelectorAll(".delete-file").forEach(button => {
     button.addEventListener("click", function () {
       let fileId = this.getAttribute("data-file-id");
