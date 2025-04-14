@@ -21,6 +21,7 @@ def create_app():
 
     Config.Initialize_database()
     
+    
     # Initialize SQLAlchemy
     db.init_app(app)
     Migrate(app, db)

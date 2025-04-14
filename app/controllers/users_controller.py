@@ -11,12 +11,14 @@ from config import Config
 from app.models.category_models import Category
 from app.models.file_models import File
 from flask_login import current_user
+from app.models.user_models import User
 from app.services.services import CRUDService
-
+from app.utils.validation_utils import Validation
 ALLOWED_EXTENSIONS = {"txt", "csv", "pdf", "docx", "xlsx", "pptx"}
 
 
 file_service = CRUDService(File)
+user_services = CRUDService(User)
 categories_service = CRUDService(Category)
 
 def allowed_file(filename):
@@ -215,3 +217,47 @@ def dashboard_report_users():
         'users/dashboard.html',
         file_data=file_data  
     )
+    
+
+
+def update_profiles():
+    data = request.json
+    user_id = current_user.id
+    user = user_services.get_one(id=user_id)
+
+    if not user:
+        return jsonify({"success": False, "message": "User not found"}), 404
+
+    # Fields to update
+    update_data = {
+        "firstname": data.get("asfname"),
+        "middlename": None if data.get("asmname") == "N/A" else data.get("asmname"),
+        "lastname": data.get("aslname"),
+    }
+
+    # Handle password update
+    current_password = data.get("currentPassword")
+    new_password = data.get("newPassword")
+
+    if new_password:  # User wants to change password
+        if not current_password:
+            return jsonify({"success": False, "message": "Current password is required to change password"}), 400
+        
+        if not user.check_password(current_password):  # Use model method
+            return jsonify({"success": False, "message": "Incorrect current password"}), 400
+
+         # Validate new password
+        password_error = Validation.is_strong_password(new_password)
+        if password_error:
+            return jsonify({"success": False, "message": password_error}), 400
+
+        user.set_password(new_password)  # Use model method
+
+    # Update user information
+    updated_user = user_services.update(user_id, **update_data)
+
+    if updated_user:
+        return jsonify({"success": True, "message": "Profile updated successfully"})
+    else:
+        return jsonify({"success": False, "message": "Error updating profile"}), 500
+   

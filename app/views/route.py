@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, request,send_from_directory, current_app
 from flask_login import  current_user
 from app.controllers.auth_controller import login_user_controller,logout_user_controller,register_user_controller
-from app.controllers.users_controller import upload_file,delete_file,docs_list,dashboard_report_users
+from app.controllers.users_controller import update_profiles,upload_file,delete_file,docs_list,dashboard_report_users
 from app.controllers.admin_controller import adminList,update_profile_user,get_profiles_admin, cusers,user_approved,user_disapproved, dashboard_report
 from app.models.user_models import User
 from app.models.category_models import Category
@@ -90,7 +90,6 @@ def download_file(filename):
 def delete_files(file_id=None):
     return delete_file(request, file_id)
 
-
 @admin.route('/management')
 @web_guard
 def management():
@@ -113,9 +112,19 @@ def users_approved(users_id=None):
 
 @admin.route('/users/disapproved/<int:users_id>', methods=['GET', 'PUT', 'DELETE'])
 @web_guard
-def user_disapproveds(users_id=None):
+def user_disapproveds_user(users_id=None):
     return user_disapproved(request,users_id)
 
+@admin.route('/get_profile_user/<int:users_id>')
+@web_guard_user
+def get_profile_user(users_id=None):
+    return get_profiles_admin(users_id)
+
+
+@admin.route('user/add_admin')
+@web_guard
+def user_disapproveds(users_id=None):
+    return user_disapproved(request,users_id)
 
 # USER DASHBOARD
 @main.route('/user/dashboard')
@@ -139,3 +148,9 @@ def view_folder(slug):
     ).all()
 
     return render_template('users/single.html', category=category, files=files)
+
+
+@main.route('/user/update_profile_sc', methods=['POST'])
+@web_guard_user
+def update_profile_sc():
+    return update_profiles()

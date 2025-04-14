@@ -1,11 +1,20 @@
-<div class="modal fade" id="addUpload" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="addUpload"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="profileModalLabel">
-          UPLOAD DOCUMENTS
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title" id="profileModalLabel">UPLOAD DOCUMENTS</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body">
         <div class="card">
@@ -13,33 +22,177 @@
             <form id="uploadForm" method="post" enctype="multipart/form-data">
               <!-- File Upload -->
               <div>
-                <label for="docs_file" class="block text-sm font-medium text-gray-700">Documents</label>
-                <input type="file" id="docs_file" name="docs_file" class="form-control"
-                accept=".pdf,.docx,.txt,.csv,.xlsx,.pptx" required />
+                <label
+                  for="docs_file"
+                  class="block text-sm font-medium text-gray-700"
+                  >Documents</label
+                >
+                <input
+                  type="file"
+                  id="docs_file"
+                  name="docs_file"
+                  class="form-control"
+                  accept=".pdf,.docx,.txt,.csv,.xlsx,.pptx"
+                  required
+                />
                 <small class="text-muted">
                   Accepted file types:
-                  <i class="fas fa-file-pdf text-danger"></i> PDF,  
-                  <i class="fas fa-file-word text-primary"></i> DOCX,  
-                  <i class="fas fa-file-alt text-secondary"></i> TXT,  
-                  <i class="fas fa-file-csv text-success"></i> CSV,  
-                  <i class="fas fa-file-excel text-success"></i> XLSX,  
+                  <i class="fas fa-file-pdf text-danger"></i> PDF,
+                  <i class="fas fa-file-word text-primary"></i> DOCX,
+                  <i class="fas fa-file-alt text-secondary"></i> TXT,
+                  <i class="fas fa-file-csv text-success"></i> CSV,
+                  <i class="fas fa-file-excel text-success"></i> XLSX,
                   <i class="fas fa-file-powerpoint text-warning"></i> PPTX
                 </small>
-                
+
                 <div id="docs_fileError" class="error-text text-danger"></div>
                 <!-- Progress Bar -->
-                <div class="progress mt-3" style="display: none;" id="progressContainer">
-                  <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar"
-                    style="width: 0%;" id="uploadProgress">0%</div>
+                <div
+                  class="progress mt-3"
+                  style="display: none"
+                  id="progressContainer"
+                >
+                  <div
+                    class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                    role="progressbar"
+                    style="width: 0%"
+                    id="uploadProgress"
+                  >
+                    0%
+                  </div>
                 </div>
               </div>
 
-              <button type="submit" id="uploadButton" class="btn app-btn-primary theme-btn w-100 mt-4 mb-0">
+              <button
+                type="submit"
+                id="uploadButton"
+                class="btn app-btn-primary theme-btn w-100 mt-4 mb-0"
+              >
                 Upload
               </button>
             </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="modal fade"
+  id="profileUserModal"
+  tabindex="-1"
+  aria-labelledby="profileModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">PROFILE DETAILS</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="card">
+          <div class="card-body p-3">
+            <form id="profileForm">
+              <!-- Username -->
+              <div class="mb-2">
+                <label class="form-label">Username</label>
+                <input
+                  type="text"
+                  id="asusername"
+                  name="asusername"
+                  class="form-control"
+                  readonly
+                  required
+                />
+              </div>
 
+              <!-- Full Name -->
+              <div class="row">
+                <div class="col-6">
+                  <div class="mb-2">
+                    <label class="form-label"
+                      >First Name <span style="color: red">*</span></label
+                    >
+                    <input
+                      type="text"
+                      id="asfname"
+                      name="asfname"
+                      class="form-control"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="mb-2">
+                    <label class="form-label">Middle Name</label>
+                    <input
+                      type="text"
+                      id="asmname"
+                      name="asmname"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="mb-2">
+                <label class="form-label"
+                  >Last Name <span style="color: red">*</span></label
+                >
+                <input
+                  type="text"
+                  id="aslname"
+                  name="aslname"
+                  class="form-control"
+                  required
+                />
+              </div>
 
+              <input type="hidden" id="profile_id" name="profile_user_id" />
+
+              <!-- Address -->
+              <div class="mb-2">
+                <label class="form-label"
+                  >Email <span style="color: red">*</span></label
+                >
+                <input
+                  type="text"
+                  id="asemail"
+                  name="email"
+                  class="form-control"
+                  required
+                  readonly
+                />
+              </div>
+
+              <hr />
+              <div class="mb-3">
+                <label class="form-label">Current Password (required to change password)</label>
+                <input type="password" id="currentPassword" name="currentPassword" class="form-control"
+                    placeholder="Enter current password" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">New Password (optional)</label>
+                <input type="password" id="newPassword" name="newPassword" class="form-control"
+                    placeholder="Leave blank to keep current password" />
+            </div>
+              <div class="d-grid">
+                <button
+                  type="submit"
+                  class="btn btn-primary text-white"
+                  id="profileButtonUpdate"
+                  data-loading-text="Save Changes..."
+                >
+                  Save Changes
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>

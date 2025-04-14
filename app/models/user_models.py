@@ -9,12 +9,10 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(120), nullable=False, unique=True)
     firstname = db.Column(db.String(120), nullable=False)
     lastname = db.Column(db.String(120), nullable=False)
-    middlename = db.Column(db.String(120), nullable=True)  # Optional field
+    middlename = db.Column(db.String(120), nullable=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(256), nullable=False)
     role = db.Column(db.String(20), default='teacher')
-
-    # Status column (0 = pending, 1 = approved, 2 = rejected, etc.)
     status = db.Column(db.Integer, default=0, nullable=False)
 
     def set_password(self, password):
@@ -25,9 +23,9 @@ class User(UserMixin, db.Model):
 
     @property
     def fullname(self):
-        parts = [self.firstname, self.lastname] 
-        if self.middlename:  
-            parts.insert(1, self.middlename)  
+        parts = [self.firstname, self.lastname]
+        if self.middlename:
+            parts.insert(1, self.middlename)
         return " ".join(parts).strip()
 
     def __repr__(self):

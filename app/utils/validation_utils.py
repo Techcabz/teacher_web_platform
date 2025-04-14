@@ -35,3 +35,5 @@ class Validation:
             r"[A-Za-z\d@$!%*?&]{8,}$"  # Minimum 8 characters
         )
         return bool(re.match(password_pattern, password))
+    
+    
