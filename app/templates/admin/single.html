@@ -77,7 +77,7 @@
                         onclick="handleFile('{{ file.filename }}', '{{ file.file_extension }}')">
                         <i class="fas fa-print text-white"></i> Print / Download
                       </button>
-                      <button class="btn btn-danger btn-sm delete-file text-white" data-file-id="{{ file.id }}">
+                      <button class="btn btn-danger btn-sm delete-file text-white" data-id="{{ file.id }}">
                         <i class="fas fa-trash-alt text-white"></i> Delete
                       </button>
                     </div>
@@ -96,8 +96,8 @@
   </div>
   <script>
     function handleFile(filename, fileExt) {
-      let fileUrl = '{{ url_for("static", filename="upload/") }}' + filename;
-
+      let fileUrl = '{{ url_for("static", filename="upload/") }}' + filename + '.' + fileExt;
+      // alert(fileUrl)
       if (fileExt.toLowerCase() === 'pdf') {
         // Open and print PDFs
         let printWindow = window.open(fileUrl, '_blank');

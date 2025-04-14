@@ -185,6 +185,35 @@ async function deleteCategory(id) {
   );
 }
 
+async function deleteFile(id) {
+  showConfirmationDialog(
+    "Are you sure you want to delete this file?",
+    "Delete",
+    "Cancel",
+    async () => {
+      try {
+        const response = await fetch(`/admin/delete_file/${id}`, {
+          method: "DELETE",
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || "Failed to delete file.");
+        }
+
+        alert("success", "top", data.message);
+        location.reload();
+      } catch (error) {
+        console.error("Error:", error);
+        alert("error", "top", error.message);
+      }
+    },
+    () => {
+      alert("info", "top", "File deletion was canceled.");
+    }
+  );
+}
 async function deleteUser(id) {
   showConfirmationDialog(
     "Deleting this user will also remove all files uploaded by them. This action is irreversible. Are you sure you want to proceed?",
@@ -607,34 +636,8 @@ document.addEventListener("DOMContentLoaded", function () {
   document.querySelectorAll(".delete-file").forEach((button) => {
     button.addEventListener("click", function () {
       let fileId = this.getAttribute("data-file-id");
-
-      if (
-        showConfirmationDialog(
-          "Are you sure you want to delete this file?",
-          "Yes",
-          "No"
-        )
-      ) {
-        fetch(`/admin/delete_file/${fileId}`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.success) {
-              alert("success", "top", data.message);
-
-              location.reload();
-            } else {
-              alert("warning", "top", data.message);
-            }
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
-      }
+      const id = this.dataset.id;
+      deleteFile(id);
     });
   });
 

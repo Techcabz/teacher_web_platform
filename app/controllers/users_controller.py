@@ -143,8 +143,8 @@ def upload_file(request):
     upload_folder = os.path.join(current_app.root_path, "static", "upload")
     os.makedirs(upload_folder, exist_ok=True)  
 
-    filepath = os.path.join("static", "upload", filename)
-    full_path = os.path.join(upload_folder, filename)
+    filepath = os.path.join("static", "upload", filename_with_ext)
+    full_path = os.path.join(upload_folder, filename_with_ext)
 
     file.seek(0, os.SEEK_END)
     file_size = file.tell()
