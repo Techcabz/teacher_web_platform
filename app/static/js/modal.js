@@ -185,7 +185,6 @@ async function deleteCategory(id) {
   );
 }
 
-
 async function deleteUser(id) {
   showConfirmationDialog(
     "Deleting this user will also remove all files uploaded by them. This action is irreversible. Are you sure you want to proceed?",
@@ -215,7 +214,6 @@ async function deleteUser(id) {
     }
   );
 }
-
 
 const uploadForm = document.querySelector("#uploadForm");
 if (uploadForm) {
@@ -610,7 +608,13 @@ document.addEventListener("DOMContentLoaded", function () {
     button.addEventListener("click", function () {
       let fileId = this.getAttribute("data-file-id");
 
-      if (confirm("Are you sure you want to delete this file?")) {
+      if (
+        showConfirmationDialog(
+          "Are you sure you want to delete this file?",
+          "Yes",
+          "No"
+        )
+      ) {
         fetch(`/admin/delete_file/${fileId}`, {
           method: "DELETE",
           headers: {
