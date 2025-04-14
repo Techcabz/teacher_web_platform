@@ -67,8 +67,7 @@
     </div>
     <script>
         function handleFile(filename, fileExt) {
-            let fileUrl = '{{ url_for("static", filename="upload/") }}' + filename;
-
+            let fileUrl = '{{ url_for("static", filename="upload/") }}' + filename + '.' + fileExt;
             if (fileExt.toLowerCase() === 'pdf') {
                 // Open and print PDFs
                 let printWindow = window.open(fileUrl, '_blank');
