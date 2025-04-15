@@ -34,7 +34,12 @@
 
           <tr>
             <td class="cell">{{ loop.index }}</td>
-            <td class="cell">{{ category.name | upper}}</td>
+            <td class="cell">
+              <span class="text-truncate d-inline-block" style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                    data-bs-toggle="tooltip" data-bs-placement="top" title="{{ category.name }}">
+                {{ category.name | upper }}
+              </span>
+            </td>
             <td class="cell">
               <div class="text-truncate"
                 style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
