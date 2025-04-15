@@ -57,7 +57,7 @@ def user_disapproved(request,users_id=None):
         if not users:
             return jsonify({'success': False, 'message': 'Invalid User'}), 404
     
-        user_services.delete(id=users_id)
+        user_services.delete(users_id)
         return jsonify({'success': False, 'message': 'User remove successfully.'}), 200
     
     return jsonify({'success': False, 'message': 'Create method must be DELETE.'}), 405
