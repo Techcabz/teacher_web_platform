@@ -2,6 +2,7 @@ import os
 import re
 import fitz  
 import openpyxl  
+import xlrd
 from pptx import Presentation
 from io import BytesIO
 from flask import current_app, request, jsonify,render_template,redirect,url_for
@@ -14,7 +15,7 @@ from flask_login import current_user
 from app.models.user_models import User
 from app.services.services import CRUDService
 from app.utils.validation_utils import Validation
-ALLOWED_EXTENSIONS = {"txt", "csv", "pdf", "docx", "xlsx", "pptx"}
+ALLOWED_EXTENSIONS = {"txt", "csv", "pdf", "docx", "xlsx", "pptx", "xls"}
 
 
 file_service = CRUDService(File)
@@ -35,6 +36,19 @@ def extract_text_from_xlsx(file):
         for row in ws.iter_rows(values_only=True):
             text.append(" ".join(str(cell) for cell in row if cell)) 
             
+    return "\n".join(text).strip()
+
+def extract_text_from_xls(file):
+    """Extract text from an XLS file."""
+    text = []
+    file.seek(0)
+    workbook = xlrd.open_workbook(file_contents=file.read())
+    
+    for sheet in workbook.sheets():
+        for row_idx in range(sheet.nrows):
+            row_values = sheet.row_values(row_idx)
+            text.append(" ".join(str(cell) for cell in row_values if cell))
+
     return "\n".join(text).strip()
 
 def extract_text_from_docx(file):
@@ -114,6 +128,8 @@ def upload_file(request):
         content = extract_text_from_docx(file)
     elif file_ext == "xlsx":
         content = extract_text_from_xlsx(file)
+    elif file_ext == "xls":
+        content = extract_text_from_xls(file)
     elif file_ext == "pptx":
         content = extract_text_from_pptx(file) 
     else:
