@@ -5,6 +5,7 @@ from app.models.user_models import User
 from app.utils.validation_utils import Validation
 from app.models.file_models import File 
 from app.models.category_models import Category
+from app.services.user_services import UserService
 
 user_services = CRUDService(User)
 file_services = CRUDService(File)
@@ -139,3 +140,52 @@ def dashboard_report():
         pendingCount=pending_count,
         file_data=file_data  
     )
+    
+def admin_add(request):
+    if request.method == 'POST':
+        data = request.json
+        print(data)
+
+        username = data.get('username', '').strip().lower()
+        firstname = data.get('fname', '').strip().lower()
+        lastname = data.get('lname', '').strip().lower()
+        middlename = data.get('mname', '').strip().lower() or None  # Optional
+        password = data.get('password', '')
+
+        # Validate required fields
+        if not all([username, firstname, lastname, password]):
+            return jsonify({'success': False, 'message': 'All fields are required.'}), 400
+
+        # Validate name (only alphabetic characters)
+        if not Validation.is_valid_name(firstname) or not Validation.is_valid_name(lastname):
+            return jsonify({'success': False, 'message': 'Names must contain only alphabetic characters.'}), 400
+
+        # Validate strong password
+        if not Validation.is_strong_password(password):
+            return jsonify({
+                'success': False,
+                'message': 'Password must be at least 8 characters long, with uppercase, lowercase, a number, and a special character.'
+            }), 400
+
+        # Check if username already exists
+        if UserService.get_user_by_username(username):
+            return jsonify({'success': False, 'message': 'Username is already taken.'}), 400
+
+        # Create new user
+        new_user = UserService.create_user(
+            username=username,
+            email="none",
+            firstname=firstname,
+            lastname=lastname,
+            middlename=middlename,
+            password=password,
+            role='admin',
+            status=1
+        )
+
+        if new_user:
+            return jsonify({'success': True, 'message': 'Registration successful.'}), 200
+        else:
+            return jsonify({'success': False, 'message': 'Failed to register. Please try again.'}), 500
+
+    return jsonify({'success': False, 'message': 'Invalid request method.'}), 405

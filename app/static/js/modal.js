@@ -463,19 +463,19 @@ if (profileForm) {
   });
 }
 
-const addAdminModal = document.querySelector("#addAdminModal");
-if (addAdminModal) {
-  addAdminModal.addEventListener("submit", async (e) => {
+const profileFormAddAdmin = document.querySelector("#profileFormAddAdmin");
+if (profileFormAddAdmin) {
+  profileFormAddAdmin.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const formData = new FormData(e.target);
     const formDataObject = Object.fromEntries(formData.entries());
-    const button = addAdminModal.querySelector("button.btn-primary");
-
+    const button = profileFormAddAdmin.querySelector("button.btn-primary");
+    console.log(formDataObject);
     setLoadingState(button, true);
 
     try {
-      const response = await fetch("/user/add_admin", {
+      const response = await fetch("/admin/user/add_admin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -496,7 +496,7 @@ if (addAdminModal) {
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("error", "top", "An error occurred while updating your profile.");
+      alert("error", "top", "An error occurred while createing profile.");
       setLoadingState(button, false);
     }
   });
