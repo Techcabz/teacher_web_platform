@@ -1,7 +1,7 @@
 $(document).ready(function () {
-  var table = $("#datatable").DataTable({
+  // Common DataTable settings
+  const commonOptions = {
     dom: "lfrtip",
-
     responsive: {
       details: true,
       breakpoints: [
@@ -23,302 +23,75 @@ $(document).ready(function () {
     pageLength: 5,
     lengthMenu: [5, 10, 25, 50, 100],
     columnDefs: [{ orderable: false, targets: "_all" }],
+  };
+
+  // Initialize simple tables
+  const simpleTables = [
+    "#datatable",
+    "#datatable1",
+    "#datatable2",
+    "#datatable3",
+    "#datatable4",
+    "#datatable5",
+  ];
+
+  const dataTables = {};
+
+  simpleTables.forEach((selector) => {
+    dataTables[selector] = $(selector).DataTable(commonOptions);
   });
 
-  var table = $("#datatable1").DataTable({
-    dom: "lfrtip",
-
-    responsive: {
-      details: true,
-      breakpoints: [
-        { name: "desktop", width: Infinity },
-        { name: "tablet", width: 1024 },
-        { name: "fablet", width: 768 },
-        { name: "phone", width: 480 },
-      ],
-    },
-    language: {
-      paginate: {
-        first: "First",
-        previous: "Previous",
-        next: "Next",
-        last: "Last",
-      },
-    },
-    select: true,
-    pageLength: 5,
-    lengthMenu: [5, 10, 25, 50, 100],
-    columnDefs: [{ orderable: false, targets: "_all" }],
-  });
-
-  var table = $("#datatable2").DataTable({
-    dom: "lfrtip",
-
-    responsive: {
-      details: true,
-      breakpoints: [
-        { name: "desktop", width: Infinity },
-        { name: "tablet", width: 1024 },
-        { name: "fablet", width: 768 },
-        { name: "phone", width: 480 },
-      ],
-    },
-    language: {
-      paginate: {
-        first: "First",
-        previous: "Previous",
-        next: "Next",
-        last: "Last",
-      },
-    },
-    select: true,
-    pageLength: 5,
-    lengthMenu: [5, 10, 25, 50, 100],
-    columnDefs: [{ orderable: false, targets: "_all" }],
-  });
-
-  var table = $("#datatable3").DataTable({
-    dom: "lfrtip",
-
-    responsive: {
-      details: true,
-      breakpoints: [
-        { name: "desktop", width: Infinity },
-        { name: "tablet", width: 1024 },
-        { name: "fablet", width: 768 },
-        { name: "phone", width: 480 },
-      ],
-    },
-    language: {
-      paginate: {
-        first: "First",
-        previous: "Previous",
-        next: "Next",
-        last: "Last",
-      },
-    },
-    select: true,
-    pageLength: 5,
-    lengthMenu: [5, 10, 25, 50, 100],
-    columnDefs: [{ orderable: false, targets: "_all" }],
-  });
-
-  var table = $("#datatable4").DataTable({
-    dom: "lfrtip",
-
-    responsive: {
-      details: true,
-      breakpoints: [
-        { name: "desktop", width: Infinity },
-        { name: "tablet", width: 1024 },
-        { name: "fablet", width: 768 },
-        { name: "phone", width: 480 },
-      ],
-    },
-    language: {
-      paginate: {
-        first: "First",
-        previous: "Previous",
-        next: "Next",
-        last: "Last",
-      },
-    },
-    select: true,
-    pageLength: 5,
-    lengthMenu: [5, 10, 25, 50, 100],
-    columnDefs: [{ orderable: false, targets: "_all" }],
-  });
-
-  var table = $("#datatable5").DataTable({
-    dom: "lfrtip",
-
-    responsive: {
-      details: true,
-      breakpoints: [
-        { name: "desktop", width: Infinity },
-        { name: "tablet", width: 1024 },
-        { name: "fablet", width: 768 },
-        { name: "phone", width: 480 },
-      ],
-    },
-    language: {
-      paginate: {
-        first: "First",
-        previous: "Previous",
-        next: "Next",
-        last: "Last",
-      },
-    },
-    select: true,
-    pageLength: 5,
-    lengthMenu: [5, 10, 25, 50, 100],
-    columnDefs: [{ orderable: false, targets: "_all" }],
-  });
-
+  // Filter footer (for #datatable only)
+  const filterTable = dataTables["#datatable"];
   $("#datatable tfoot th").each(function (i) {
     if ($(this).text() !== "") {
-      var isStatusColumn = $(this).text() == "Status" ? true : false;
-      var select = $('<select><option value=""></option></select>')
+      const isStatusColumn = $(this).text() === "Status";
+      const select = $('<select><option value=""></option></select>')
         .appendTo($(this).empty())
         .on("change", function () {
-          var val = $(this).val();
-
-          table
+          const val = $(this).val();
+          filterTable
             .column(i)
-            .search(val ? "^" + $(this).val() + "$" : val, true, false)
+            .search(val ? "^" + val + "$" : val, true, false)
             .draw();
         });
 
-      // Get the Status values a specific way since the status is a anchor/image
       if (isStatusColumn) {
-        var statusItems = [];
-
-        /* ### IS THERE A BETTER/SIMPLER WAY TO GET A UNIQUE ARRAY OF <TD> data-filter ATTRIBUTES? ### */
-        table
+        const statusItems = [];
+        filterTable
           .column(i)
           .nodes()
           .to$()
-          .each(function (d, j) {
-            var thisStatus = $(j).attr("data-filter");
-            if ($.inArray(thisStatus, statusItems) === -1)
-              statusItems.push(thisStatus);
+          .each(function () {
+            const status = $(this).attr("data-filter");
+            if ($.inArray(status, statusItems) === -1) statusItems.push(status);
           });
-
         statusItems.sort();
-
-        $.each(statusItems, function (i, item) {
-          select.append('<option value="' + item + '">' + item + "</option>");
+        $.each(statusItems, (i, item) => {
+          select.append(`<option value="${item}">${item}</option>`);
         });
-      }
-      // All other non-Status columns (like the example)
-      else {
-        table
+      } else {
+        filterTable
           .column(i)
           .data()
           .unique()
           .sort()
-          .each(function (d, j) {
-            select.append('<option value="' + d + '">' + d + "</option>");
+          .each(function (d) {
+            select.append(`<option value="${d}">${d}</option>`);
           });
       }
     }
   });
 
-  var table = $("#datatable_sched1").DataTable({
-    dom: "l<br>Bfrtip",
-    buttons: [
-      {
-        extend: "print",
-        text: "Print",
-        autoPrint: true,
-        exportOptions: {
-          columns: ":visible",
-          rows: function (idx, data, node) {
-            var dt = new $.fn.dataTable.Api("#example");
-            var selected = dt.rows({ selected: true }).indexes().toArray();
-            if (selected.length === 0 || $.inArray(idx, selected) !== -1) {
-              return true;
-            } else {
-              return false;
-            }
-          },
-        },
-
-        customize: function (win) {
-          $(win.document.body)
-            .find("table")
-            .addClass("display")
-            .css("font-size", "9px");
-          $(win.document.body)
-            .find("tr:nth-child(odd) td")
-            .each(function (index) {
-              $(this).css("background-color", "#D0D0D0");
-            });
-          $(win.document.body).find("h1").css("text-align", "center");
-        },
-      },
-
-      "colvis",
-    ],
-    responsive: {
-      details: true,
-      breakpoints: [
-        { name: "desktop", width: Infinity },
-        { name: "tablet", width: 1024 },
-        { name: "fablet", width: 768 },
-        { name: "phone", width: 480 },
+  // Schedule tables with export buttons
+  const schedTables = ["#datatable_sched1", "#datatable_docs2"];
+  schedTables.forEach((selector) => {
+    $(selector).DataTable({
+      ...commonOptions,
+      dom: "l<br>Brtip",
+      buttons: [
+       
       ],
-    },
-    language: {
-      paginate: {
-        first: "First",
-        previous: "Previous",
-        next: "Next",
-        last: "Last",
-      },
-    },
-    select: true,
-    pageLength: 5,
-    lengthMenu: [5, 10, 25, 50, 100],
-    columnDefs: [{ orderable: false, targets: "_all" }],
-  });
-
-  var table = $("#datatable_sched2").DataTable({
-    dom: "l<br>Bfrtip",
-    buttons: [
-      {
-        extend: "print",
-        text: "Print",
-        autoPrint: true,
-        exportOptions: {
-          columns: ":visible",
-          rows: function (idx, data, node) {
-            var dt = new $.fn.dataTable.Api("#example");
-            var selected = dt.rows({ selected: true }).indexes().toArray();
-            if (selected.length === 0 || $.inArray(idx, selected) !== -1) {
-              return true;
-            } else {
-              return false;
-            }
-          },
-        },
-
-        customize: function (win) {
-          $(win.document.body)
-            .find("table")
-            .addClass("display")
-            .css("font-size", "9px");
-          $(win.document.body)
-            .find("tr:nth-child(odd) td")
-            .each(function (index) {
-              $(this).css("background-color", "#D0D0D0");
-            });
-          $(win.document.body).find("h1").css("text-align", "center");
-        },
-      },
-
-      "colvis",
-    ],
-    responsive: {
-      details: true,
-      breakpoints: [
-        { name: "desktop", width: Infinity },
-        { name: "tablet", width: 1024 },
-        { name: "fablet", width: 768 },
-        { name: "phone", width: 480 },
-      ],
-    },
-    language: {
-      paginate: {
-        first: "First",
-        previous: "Previous",
-        next: "Next",
-        last: "Last",
-      },
-    },
-    select: true,
-    pageLength: 5,
-    lengthMenu: [5, 10, 25, 50, 100],
-    columnDefs: [{ orderable: false, targets: "_all" }],
+    });
   });
 });

@@ -1,0 +1,177 @@
+{% extends "admin/template/admin_layout.html" %}
+{% block wrapper_content %}
+<div class="app-content pt-3 p-md-3 p-lg-4">
+    <div class="container-xl">
+        <div class="row g-3 mb-4 align-items-center justify-content-between">
+            <div class="col-auto">
+                <h1 class="app-page-title mb-0">REPORT</h1>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-primary" onclick="window.print()">
+                    <i class="fas fa-print me-1"></i> Print Report
+                </button>
+            </div>
+        </div>
+        <hr class="mt-0" />
+
+        <!-- Summary Cards -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Most Active Uploader</h5>
+                        {% if most_active_user %}
+                        <p class="card-text">
+                            <strong>{{ most_active_user.fullname }}</strong> has uploaded 
+                            <strong>{{ most_active_user.file_count }}</strong> files (Total: 
+                            {{ (most_active_user.total_size / (1024*1024))|round(2) }} MB)
+                        </p>
+                        {% else %}
+                        <p class="card-text">No upload data available</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Files Uploaded</h5>
+                        <p class="card-text">
+                            <strong>{{ user_uploads|sum(attribute='file_count') }}</strong> files by 
+                            <strong>{{ user_uploads|length }}</strong> users
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Highcharts Visualization -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <div id="uploadChart" style="height: 400px;"></div>
+            </div>
+        </div>
+
+        <!-- Detailed Table -->
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>User</th>
+                                <th>Files Uploaded</th>
+                                <th>Total Size</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in user_uploads %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ user.fullname }}</td>
+                                <td>{{ user.file_count }}</td>
+                                <td>{{ (user.total_size / (1024*1024))|round(2) }} MB</td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="4" class="text-center">No data available</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Highcharts JS -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Prepare data for chart
+    const chartData = [
+        {% for user in user_uploads %}
+        {
+            name: '{{ user.fullname }}',
+            y: {{ user.file_count }},
+            size: {{ user.total_size }},
+            color: getRandomColor()
+        },
+        {% endfor %}
+    ];
+
+    // Create chart
+    Highcharts.chart('uploadChart', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Files Uploaded by Users'
+        },
+        xAxis: {
+            type: 'category'
+        },
+        yAxis: {
+            title: {
+                text: 'Number of Files'
+            }
+        },
+        tooltip: {
+            formatter: function() {
+                return `<b>${this.point.name}</b><br/>
+                        Files: ${this.point.y}<br/>
+                        Total Size: ${(this.point.size / (1024*1024)).toFixed(2)} MB`;
+            }
+        },
+        plotOptions: {
+            column: {
+                borderRadius: 5,
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.y}'
+                }
+            }
+        },
+        series: [{
+            name: 'Files Uploaded',
+            data: chartData
+        }],
+        credits: {
+            enabled: false
+        }
+    });
+
+    // Function to generate random colors
+    function getRandomColor() {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+});
+</script>
+
+<!-- Print Styles -->
+<style media="print">
+    @page {
+        size: A4 landscape;
+        margin: 1cm;
+    }
+    body {
+        padding: 20px;
+    }
+    .app-header, .app-sidepanel, .no-print {
+        display: none !important;
+    }
+    .card {
+        border: 1px solid #ddd;
+        page-break-inside: avoid;
+    }
+    h1 {
+        color: #000 !important;
+    }
+</style>
+{% endblock %}

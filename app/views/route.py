@@ -4,6 +4,7 @@ from app.controllers.auth_controller import login_user_controller,logout_user_co
 from app.controllers.users_controller import update_profiles,upload_file,delete_file,docs_list,dashboard_report_users
 from app.controllers.admin_controller import adminList,update_profile_user,get_profiles_admin, cusers,user_approved,user_disapproved, dashboard_report,admin_add
 from app.models.user_models import User
+from app.controllers.report_controller import report
 from app.models.category_models import Category
 from app.models.file_models import File
 from app.extensions import db
@@ -120,6 +121,11 @@ def user_disapproveds_user(users_id=None):
 def get_profile_user(users_id=None):
     return get_profiles_admin(users_id)
 
+@admin.route('/reports')
+@web_guard
+def reports():
+    return report()
+
 
 @admin.route('user/add_admin', methods=['POST', 'PUT', 'DELETE'])
 @web_guard
@@ -142,10 +148,15 @@ def user_docs():
 def view_folder(slug):
     category = Category.query.filter_by(slug=slug).first()
 
-    files = File.query.filter_by(category_id=category.id).join(User).add_columns(
-        File.id, File.filename, File.file_size, File.file_extension,File.uploader_id,
-        File.uploaded_at, User.firstname, User.middlename, User.lastname
-    ).all()
+    user_id = current_user.id 
+        
+    files = File.query.join(User).join(Category).add_columns(
+        File.id, File.filename, File.file_size, File.file_extension, File.uploader_id,
+        File.uploaded_at,
+        User.firstname, User.middlename, User.lastname,
+        Category.name.label('category_name'), Category.slug.label('category_slug')
+    ).filter(File.uploader_id == user_id).all()
+       
 
     return render_template('users/single.html', category=category, files=files)
 

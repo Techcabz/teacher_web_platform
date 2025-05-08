@@ -209,7 +209,17 @@ def delete_file(request, file_id=None):
 def docs_list(request):
     if request.method == 'GET':
         categories = categories_service.get()
-        return render_template('users/docs.html', categories=categories)
+        
+        user_id = current_user.id 
+        
+        files = File.query.join(User).join(Category).add_columns(
+            File.id, File.filename, File.file_size, File.file_extension, File.uploader_id,
+            File.uploaded_at,
+            User.firstname, User.middlename, User.lastname,
+            Category.name.label('category_name'), Category.slug.label('category_slug')
+        ).filter(File.uploader_id == user_id).all()
+       
+        return render_template('users/docs.html', categories=categories,files=files)
     
 
 def dashboard_report_users():

@@ -6,6 +6,7 @@ from app.utils.validation_utils import Validation
 from app.models.file_models import File 
 from app.models.category_models import Category
 from app.services.user_services import UserService
+import shutil
 
 user_services = CRUDService(User)
 file_services = CRUDService(File)
@@ -116,7 +117,6 @@ def update_profile_user():
 
 
 def dashboard_report():
-     # Fetch categories
     categories = category_services.get()
     files = file_services.get()  
     users = user_services.get()
@@ -124,22 +124,39 @@ def dashboard_report():
     pending_count = sum(1 for user in users if user.status == 0)
     total_count = len(users)
     total_file = len(files)
-   
-    
-    file_data = {category.name: 0 for category in categories}  
 
+    file_data = {category.name: 0 for category in categories}
     for file in files:
         if file.category_id in [category.id for category in categories]:
             category_name = next(cat.name for cat in categories if cat.id == file.category_id)
             file_data[category_name] += 1
-    print(file_data)
+
+    # Get disk space
+    disk = get_disk_space()
+    disk_gb = {
+        'total': round(disk['total'] / (1024 ** 3), 2),
+        'used': round(disk['used'] / (1024 ** 3), 2),
+        'free': round(disk['free'] / (1024 ** 3), 2)
+    }
+
     return render_template(
         'admin/dashboard.html',
         total_count=total_count,
         total_file=total_file,
         pendingCount=pending_count,
-        file_data=file_data  
+        file_data=file_data,
+        disk_space=disk_gb
     )
+
+    
+def get_disk_space(path='/'):
+    total, used, free = shutil.disk_usage(path)
+    return {
+        'total': total,
+        'used': used,
+        'free': free
+    }
+    
     
 def admin_add(request):
     if request.method == 'POST':
