@@ -6,7 +6,7 @@ class Config:
     BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
     # Decide database type: 'sqlite' or 'mysql'
-    DB_TYPE = os.getenv("DB_TYPE", "mysql").lower()
+    DB_TYPE = os.getenv("DB_TYPE", "sqlite").lower()
 
     if DB_TYPE == "mysql":
         # MySQL configuration using pymysql

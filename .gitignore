@@ -10,5 +10,3 @@ app/services/__pycache__/
 app/utils/__pycache__/
 app/views/__pycache__/
 
-# Database migrations
-migrations/
