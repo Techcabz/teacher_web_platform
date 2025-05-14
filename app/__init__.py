@@ -28,7 +28,7 @@ def create_app():
    
     with app.app_context():
         db.create_all()
-        UserService.create_default_admin()
+        # UserService.create_default_admin()
         
         
     # Initialize LoginManager
