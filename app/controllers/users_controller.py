@@ -135,17 +135,17 @@ def upload_file(request):
     else:
         content = file.read().decode("utf-8")
 
-
+    # print(content)
     # Categorize content
     category_name = categorize_content(content)
     if category_name == "Uncategorized":
         return jsonify({'error': True, 'message': 'File does not match any category. Upload denied.'}), 400
-
+    
     # Fetch category from database
-    category = categories_service.get_one(name=category_name)
+    # category = categories_service.get_one(name=category_name)
+    category = Category.query.filter_by(name=category_name).first()
     if not category:
         return jsonify({'error': True, 'message': 'Category not found in database.'}), 400
-
     
     existing_file = file_service.get_one(
         filename=filename, category_id=category.id, uploader_id=uploader_id
@@ -182,7 +182,7 @@ def upload_file(request):
     return jsonify({
         "filename": filename,
         "category": category_name,
-        "file_url": f"/{filepath}",
+       
         "message": "File uploaded successfully!"
     })
 
@@ -238,7 +238,6 @@ def dashboard_report_users():
             category_name = next(cat.name for cat in categories if cat.id == file.category_id)
             file_data[category_name] += 1
             
-    print(file_data)
     return render_template(
         'users/dashboard.html',
         file_data=file_data  

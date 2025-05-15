@@ -148,16 +148,17 @@ def user_docs():
 def view_folder(slug):
     category = Category.query.filter_by(slug=slug).first()
 
-    user_id = current_user.id 
-        
+    user_id = current_user.id
+
     files = File.query.join(User).join(Category).add_columns(
         File.id, File.filename, File.file_size, File.file_extension, File.uploader_id,
         File.uploaded_at,
         User.firstname, User.middlename, User.lastname,
         Category.name.label('category_name'), Category.slug.label('category_slug')
-    ).filter(File.uploader_id == user_id).all()
-       
-
+    ).filter(
+        File.uploader_id == user_id,
+        File.category_id == category.id  # <- this ensures only files from this category
+    ).all()
     return render_template('users/single.html', category=category, files=files)
 
 
