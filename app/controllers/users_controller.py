@@ -135,7 +135,7 @@ def upload_file(request):
     else:
         content = file.read().decode("utf-8")
 
-    # print(content)
+    print(content)
     # Categorize content
     category_name = categorize_content(content)
     if category_name == "Uncategorized":
@@ -253,32 +253,28 @@ def update_profiles():
     if not user:
         return jsonify({"success": False, "message": "User not found"}), 404
 
-    # Fields to update
     update_data = {
         "firstname": data.get("asfname"),
         "middlename": None if data.get("asmname") == "N/A" else data.get("asmname"),
         "lastname": data.get("aslname"),
     }
 
-    # Handle password update
     current_password = data.get("currentPassword")
     new_password = data.get("newPassword")
 
-    if new_password:  # User wants to change password
+    if new_password:  
         if not current_password:
             return jsonify({"success": False, "message": "Current password is required to change password"}), 400
         
-        if not user.check_password(current_password):  # Use model method
+        if not user.check_password(current_password):  
             return jsonify({"success": False, "message": "Incorrect current password"}), 400
 
-         # Validate new password
         password_error = Validation.is_strong_password(new_password)
         if password_error:
             return jsonify({"success": False, "message": password_error}), 400
 
-        user.set_password(new_password)  # Use model method
+        user.set_password(new_password)
 
-    # Update user information
     updated_user = user_services.update(user_id, **update_data)
 
     if updated_user:

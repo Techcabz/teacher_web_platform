@@ -1,0 +1,50 @@
+{% extends "admin/template/admin_layout.html" %} {% block wrapper_content %}
+<div class="app-content pt-3 p-md-3 p-lg-4">
+  <div class="container-xl">
+    <div class="row g-3 mb-4 align-items-center justify-content-between">
+      <div class="col-auto">
+        <h1 class="app-page-title mb-0">CATEGORY FILE KEYWORD EXTRACTOR</h1>
+      </div>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label for="docs_file" class="form-label">Upload File</label>
+        <input
+          class="form-control"
+          type="file"
+          accept=".pdf,.docx,.txt,.csv,.xlsx"
+          name="docs_file"
+          id="docs_file"
+          required
+        />
+        <small class="text-muted"
+          >Accepted file types: PDF, DOCX, TXT, CSV, XLSX</small
+        >
+      </div>
+
+      <button type="submit" class="btn btn-primary text-white">
+        Extract Content
+      </button>
+    </form>
+
+    {% if content %}
+    <div class="mt-4">
+      <h3>Extracted Content:</h3>
+      <p><strong>Filename:</strong> {{ filename }}</p>
+      <pre
+        style="
+          white-space: pre-wrap;
+          background-color: #f8f9fa;
+          padding: 1rem;
+          border: 1px solid #ccc;
+        "
+      >
+{{ content }}
+  </pre
+      >
+    </div>
+     {% endif %}
+  </div>
+</div>
+{% endblock %}

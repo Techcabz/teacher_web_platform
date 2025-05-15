@@ -10,7 +10,7 @@ from app.models.file_models import File
 from app.extensions import db
 from app.utils.auth_utils import web_guard, web_guard_user
 import os
-from app.controllers.categories_controller import categories
+from app.controllers.categories_controller import categories,categories_keyword
 from app.controllers.files_controller import files
 
 main = Blueprint('main', __name__)
@@ -63,6 +63,11 @@ def update_profile_users():
 @web_guard
 def category(categoryy_id=None):
     return categories(request,categoryy_id)
+
+@admin.route('/category/keyword',methods=['GET', 'POST'])
+@web_guard
+def category_keyword():
+    return categories_keyword(request)
 
 @admin.route('/docs',methods=['GET', 'POST', 'PUT', 'DELETE'])
 @web_guard
@@ -157,7 +162,7 @@ def view_folder(slug):
         Category.name.label('category_name'), Category.slug.label('category_slug')
     ).filter(
         File.uploader_id == user_id,
-        File.category_id == category.id  # <- this ensures only files from this category
+        File.category_id == category.id 
     ).all()
     return render_template('users/single.html', category=category, files=files)
 
