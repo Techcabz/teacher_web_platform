@@ -13,14 +13,20 @@
         <input
           class="form-control"
           type="file"
-          accept=".pdf,.docx,.txt,.csv,.xlsx"
+          accept=".pdf,.docx,.txt,.csv,.xlsx,.xls,.pptx"
           name="docs_file"
           id="docs_file"
           required
         />
-        <small class="text-muted"
-          >Accepted file types: PDF, DOCX, TXT, CSV, XLSX</small
-        >
+        <small class="text-muted">
+          Accepted file types:
+          <i class="fas fa-file-pdf text-danger"></i> PDF,
+          <i class="fas fa-file-word text-primary"></i> DOCX,
+          <i class="fas fa-file-alt text-secondary"></i> TXT,
+          <i class="fas fa-file-csv text-success"></i> CSV,
+          <i class="fas fa-file-excel text-success"></i> XLSX,
+          <i class="fas fa-file-powerpoint text-warning"></i> PPTX
+        </small>
       </div>
 
       <button type="submit" class="btn btn-primary text-white">
@@ -44,7 +50,7 @@
   </pre
       >
     </div>
-     {% endif %}
+    {% endif %}
   </div>
 </div>
 {% endblock %}
